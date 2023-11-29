@@ -30,10 +30,12 @@ import {
   HlmCardTitleDirective,
 } from '@spartan-ng/ui-card-helm';
 
+
 @Component({
   selector: 'nx-ecommerce-header',
   standalone: true,
-  imports: [CommonModule, HlmButtonDirective,
+  imports: [CommonModule,
+    HlmButtonDirective,
     BrnSheetCloseDirective,
     BrnSheetComponent,
     BrnSheetContentDirective,
