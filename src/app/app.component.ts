@@ -1,14 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { SupabaseService } from 'src/services/supabase.service';
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
+  imports: [RouterModule],
   selector: 'nx-ecommerce-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'nx-ecommerce';
+export class AppComponent implements OnInit {
+  session = this.supabase.session
+
+  constructor(
+    private readonly supabase: SupabaseService
+  ) { }
+
+  ngOnInit() {
+    this.supabase.authChanges((_, session) => (this.session = session))
+  }
 }

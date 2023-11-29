@@ -1,0 +1,65 @@
+<brn-sheet>
+    <brn-sheet-overlay hlm />
+    <div hlmSheetContent *brnSheetContent="let ctx">
+        <hlm-sheet-header>
+            <h3 brnSheetTitle hlm>Carrinho</h3>
+            <p brnSheetDescription hlm>Valor total: 100,00</p>
+        </hlm-sheet-header>
+
+        <div class="flex flex-col gap-4 my-4">
+            <section hlmCard>
+                <div hlmCardHeader>
+                    <h3 hlmCardTitle>Card Title</h3>
+                    <p hlmCardDescription>Card Description</p>
+                </div>
+                <p hlmCardContent>Card Content</p>
+                <p hlmCardFooter>Card Footer</p>
+            </section>
+            <section hlmCard>
+                <div hlmCardHeader>
+                    <h3 hlmCardTitle>Card Title</h3>
+                    <p hlmCardDescription>Card Description</p>
+                </div>
+                <p hlmCardContent>Card Content</p>
+                <p hlmCardFooter>Card Footer</p>
+            </section>
+        </div>
+
+        <hlm-sheet-footer>
+            <button hlmBtn type="submit">Finalizar compra</button>
+        </hlm-sheet-footer>
+        <button brnSheetClose hlm hlmBtn variant='destructive'>
+            <span class="sr-only">Close</span>
+            <i class="ph-bold ph-x-circle text-xl"></i>
+        </button>
+    </div>
+
+    <nav class="flex justify-around items-center py-3 border-b-2 border-indigo-400">
+        <button hlmBtn brnSheetTrigger side="right" class="w-36 flex justify-center items-center gap-3">
+            <span>Carrinho</span>
+            <i class="ph-bold ph-shopping-cart"></i>
+        </button>
+
+        <div class="w-2/4 h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
+            <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
+        </div>
+
+        <button hlmBtn (click)="logout()" class="w-10 flex justify-center items-center gap-3">
+            <i class="ph-bold ph-sign-out"></i>
+        </button>
+    </nav>
+</brn-sheet>
+
+
+<!--
+     <brn-sheet>
+    <brn-sheet-overlay hlm />
+    <button brnSheetTrigger>Edit Profile</button>
+    <div hlmSheetContent *brnSheetContent="let ctx">
+        <hlm-sheet-header>
+            <h3 brnSheetTitle hlm>Edit Profile</h3>
+            <p brnSheetDescription hlm>Make changes to your profile here. Click save when you're done.</p>
+        </hlm-sheet-header>
+    </div>
+</brn-sheet>
+ -->
