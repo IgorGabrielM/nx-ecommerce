@@ -11,6 +11,8 @@ import {
 } from '@spartan-ng/ui-popover-brain';
 import { HlmPopoverCloseDirective, HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { ProductService } from 'src/services/product.service';
+import { CategoryService } from 'src/services/category.service';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -30,7 +32,21 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadProducts()
+    this.loadCategories()
+  }
+
+  loadProducts() {
+    this.productService.list().then((res) => console.log(res))
+  }
+
+  loadCategories() {
+    this.categoryService.list().then((res) => console.log(res))
+  }
 }
