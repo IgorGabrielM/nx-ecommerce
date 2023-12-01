@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
   BrnSheetCloseDirective,
@@ -55,7 +55,8 @@ import {
     HlmCardDirective,
     HlmCardFooterDirective,
     HlmCardHeaderDirective,
-    HlmCardTitleDirective],
+    HlmCardTitleDirective,
+    RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -82,6 +83,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.signOut()
+    localStorage.removeItem('token')
     this.router.navigate(['/auth'])
   }
 

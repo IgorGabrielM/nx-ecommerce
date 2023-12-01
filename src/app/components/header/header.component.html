@@ -47,6 +47,14 @@
             <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
         </div>
 
+        <!--Adicionar tratativa para que apenas os donos de lojas possam criar produtos-->
+        <a routerLink="../create-product">
+            <button hlmBtn class="w-fit flex justify-center items-center gap-3">
+                <i class="ph-bold ph-plus-circle text-xl"></i>
+                <p>Criar produto</p>
+            </button>
+        </a>
+
         <button hlmBtn (click)="logout()" class="w-10 flex justify-center items-center gap-3">
             <i class="ph-bold ph-sign-out"></i>
         </button>
