@@ -1,20 +1,18 @@
 <nx-ecommerce-header></nx-ecommerce-header>
 <div class="h-screen flex justify-center items-center">
-    <form class="max-w-md p-6 bg-white rounded-md shadow-md">
+    <form class="max-w-md p-6 bg-white rounded-md shadow-md" [formGroup]="formData">
         <div class="mb-4">
             <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-            <input type="text" id="name" name="name" [(ngModel)]="formData.name"
-                class="w-full px-3 py-2 border rounded-md">
+            <input type="text" id="name" name="name" formControlName="name" class="w-full px-3 py-2 border rounded-md">
         </div>
 
         <div class="mb-4">
             <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description:</label>
-            <textarea id="description" name="description" [(ngModel)]="formData.description"
+            <textarea id="description" name="description" formControlName="description"
                 class="w-full px-3 py-2 border rounded-md"></textarea>
         </div>
 
         <div class="mb-4" *ngIf="!fileUrl">
-
             <div class="flex items-center justify-center w-full">
                 <label for="dropzone-file"
                     class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
@@ -37,16 +35,40 @@
 
         <div class="mb-4">
             <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price:</label>
-            <input type="number" id="price" name="price" [(ngModel)]="formData.price"
+            <input type="number" id="price" name="price" formControlName="price"
                 class="w-full px-3 py-2 border rounded-md">
         </div>
 
         <div class="mb-4">
             <label for="discount" class="block text-gray-700 text-sm font-bold mb-2">Discount:</label>
-            <input type="number" id="discount" name="discount" [(ngModel)]="formData.discount"
+            <input type="number" id="discount" name="discount" formControlName="discount"
                 class="w-full px-3 py-2 border rounded-md">
         </div>
 
-        <button hlmBtn type="submit">Submit</button>
+        <div *ngIf="categories.length > 0">
+            <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
+                <button class="w-[200px] justify-between" id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn>
+                    {{ currentCategory ? currentCategory.name : 'Selecione a categoria...' }}
+                    <hlm-icon size="sm" name="radixCaretSort" />
+                </button>
+                <brn-cmd *brnPopoverContent="let ctx" hlmPopoverContent hlm class="p-0 w-[200px]" class="popover">
+                    <hlm-cmd-input-wrapper>
+                        <hlm-icon name="radixMagnifyingGlass" />
+                        <input placeholder="Search framework..." brnCmdInput hlm />
+                    </hlm-cmd-input-wrapper>
+                    <div *brnCmdEmpty hlmCmdEmpty>Não existem categorias disponíveis.</div>
+                    <brn-cmd-list hlm>
+                        <brn-cmd-group hlm>
+                            <button *ngFor="let category of categories" [value]="category.id"
+                                (click)="commandSelected(category)" hlm brnPopoverClose>
+                                {{ category.name }}
+                            </button>
+                        </brn-cmd-group>
+                    </brn-cmd-list>
+                </brn-cmd>
+            </brn-popover>
+        </div>
+
+        <button hlmBtn type="submit" (click)="onSubmit()">Submit</button>
     </form>
 </div>

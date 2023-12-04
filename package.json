@@ -22,6 +22,7 @@
     "@ng-icons/radix-icons": "^25.1.0",
     "@nx/angular": "17.1.3",
     "@spartan-ng/cli": "^0.0.1-alpha.323",
+    "@spartan-ng/ui-command-brain": "0.0.1-alpha.314",
     "@spartan-ng/ui-core": "0.0.1-alpha.314",
     "@spartan-ng/ui-dialog-brain": "0.0.1-alpha.314",
     "@spartan-ng/ui-menu-brain": "0.0.1-alpha.314",

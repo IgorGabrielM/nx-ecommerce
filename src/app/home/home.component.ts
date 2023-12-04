@@ -14,6 +14,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { ProductService } from 'src/services/product.service';
 import { CategoryService } from 'src/services/category.service';
 import { ProductModel } from 'src/models/product.model';
+import { ImageService } from 'src/services/image.service';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -36,7 +37,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private imageService: ImageService
   ) { }
 
   ngOnInit() {
@@ -46,8 +48,10 @@ export class HomeComponent implements OnInit {
 
   loadProducts() {
     this.productService.list().then(({ data: products }) => {
+      products.forEach(async (product) => {
+        product.image = (await this.imageService.getByPath(product.image)).data.publicUrl
+      })
       this.products = products
-      console.log(products)
     })
   }
 
