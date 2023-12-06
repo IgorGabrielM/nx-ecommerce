@@ -39,12 +39,6 @@
                 class="w-full px-3 py-2 border rounded-md">
         </div>
 
-        <div class="mb-4">
-            <label for="discount" class="block text-gray-700 text-sm font-bold mb-2">Discount:</label>
-            <input type="number" id="discount" name="discount" formControlName="discount"
-                class="w-full px-3 py-2 border rounded-md">
-        </div>
-
         <div *ngIf="categories.length > 0">
             <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
                 <button class="w-[200px] justify-between" id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn>

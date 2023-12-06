@@ -15,6 +15,7 @@ import { ProductService } from 'src/services/product.service';
 import { CategoryService } from 'src/services/category.service';
 import { ProductModel } from 'src/models/product.model';
 import { ImageService } from 'src/services/image.service';
+import { ProductCarouselComponent } from '../components/product-carousel/product-carousel.component';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -28,6 +29,7 @@ import { ImageService } from 'src/services/image.service';
     HlmPopoverContentDirective,
     HlmPopoverCloseDirective,
     HlmInputDirective,
+    ProductCarouselComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

@@ -1,0 +1,74 @@
+<div class="w-full mx-2" #swiperContainer>
+    <swiper [slidesPerView]="10" [initialSlide]="0" [config]="{ width: widthSwiper / 4 }">
+        <ng-template *ngFor="let product of products" swiperSlide class="w-fit">
+            <div class="py-2 w-72 rounded-xl border overflow-hidden bg-white shadow-md shadow-slate-400 my-5">
+                <div class="relative">
+                    <img class="w-full h-48 rounded-t-lg object-cover" [src]="product.image" alt="Imagem do produto">
+                    <brn-popover class="absolute bottom-2 right-2" sideOffset="5" closeDelay="100">
+                        <button id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn
+                            class="bg-[color:#7373ff] py-2 px-3 rounded-full ">
+                            <i class="ph-bold ph-shopping-cart-simple text-white"></i>
+                        </button>
+                        <div hlmPopoverContent class="w-80 grid gap-4 absolute right-80 bottom-36"
+                            *brnPopoverContent="let ctx">
+                            <div class="space-y-2">
+                                <h4 class="font-medium leading-none">Dimensions</h4>
+                                <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+                            </div>
+                            <div class="grid gap-2">
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <label hlmLabel for="width">Width</label>
+                                    <input hlmInput id="width" [defaultValue]="'100%'" class="col-span-2 h-8" />
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <label hlmLabel for="maxWidth">Max. width</label>
+                                    <input hlmInput id="maxWidth" [defaultValue]="'300px'" class="col-span-2 h-8" />
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <label hlmLabel for="height">Height</label>
+                                    <input hlmInput id="height" [defaultValue]="'25px'" class="col-span-2 h-8" />
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-4">
+                                    <label hlmLabel for="maxHeight">Max. height</label>
+                                    <input hlmInput id="maxHeight" [defaultValue]="'none'" class="col-span-2 h-8" />
+                                </div>
+                            </div>
+                        </div>
+                    </brn-popover>
+                </div>
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{ product.name }}</div>
+                    <p class="text-gray-700 text-base">
+                        {{product.description}}
+                    </p>
+                </div>
+
+                <div class="px-6 pt-4 pb-2" *ngIf="product.discount">
+                    <div class="flex items-center gap-4">
+                        <p class="text-gray-800 font-bold text-xl">R${{ (product.price - product.discount) |
+                            number:'1.2-2' }}</p>
+                        <p class="text-gray-500 text-sm uppercase">-R${{ product.discount | number:'1.2-2' }}
+                        </p>
+                    </div>
+                    <p class="line-through text-gray-500 text-sm">R${{ product.price | number:'1.2-2' }}</p>
+                </div>
+                <div class="px-6 pt-4 pb-2" *ngIf="!product.discount">
+                    <div class="flex items-center gap-4">
+                        <p class="text-gray-800 font-bold text-xl">R${{ product.price | number:'1.2-2' }}</p>
+                    </div>
+                </div>
+
+                <div class="px-6 py-2 flex flex-wrap gap-2">
+                    <div
+                        class="shadow-md shadow-emerald-200 bg-emerald-500 rounded-full px-3 py-1 text-sm font-semibold text-white">
+                        <span>Frete gratis</span>
+                    </div>
+                    <div
+                        class="shadow-md shadow-emerald-200 bg-emerald-500 rounded-full px-3 py-1 text-sm font-semibold text-white">
+                        <span>10x sem juros</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </swiper>
+</div>
