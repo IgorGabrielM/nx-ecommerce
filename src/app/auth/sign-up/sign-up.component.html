@@ -28,7 +28,7 @@
                                     class="text-[color:var(--primary)]">Clique aqui</a></span>
                         </div>
                     </div>
-                    <button hlmBtn type="submit" data-testid="btn-submit"
+                    <button hlmBtn data-testid="button-signup" type="submit"
                         [class]="'w-64 mt-6 ' + (!loading && signUpForm.valid && confirmationPasswordIsCorrect() ? '' : 'opacity-50')"
                         [disabled]="!(!this.loading && this.signUpForm.valid && this.confirmationPasswordIsCorrect())">
                         <p *ngIf="!loading">Criar</p>

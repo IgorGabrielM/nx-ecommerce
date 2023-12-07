@@ -7,6 +7,7 @@ import { BrnPopoverCloseDirective, BrnPopoverComponent, BrnPopoverContentDirecti
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { ProductService } from 'src/services/product.service';
 import { ImageService } from 'src/services/image.service';
+import { ShoppingCartService } from 'src/services/shopping-cart.service';
 
 @Component({
   selector: 'nx-ecommerce-product-carousel',
@@ -35,6 +36,8 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
   constructor(
     private productService: ProductService,
     private imageService: ImageService,
+    private shoppingCartService: ShoppingCartService,
+
 
     private cdr: ChangeDetectorRef
   ) { }
@@ -44,15 +47,9 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.swiperContainer)
     this.widthSwiper = this.swiperContainer.nativeElement.offsetWidth;
-    console.log('Largura do Swiper:', this.widthSwiper);
 
     this.cdr.detectChanges();
-  }
-
-  getSwiper() {
-    console.log()
   }
 
   loadProducts() {
@@ -62,6 +59,10 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
       })
       this.products = products
     })
+  }
+
+  insertOnShoppingCart(product: ProductModel) {
+    this.shoppingCartService.insertProduct(product).then()
   }
 
 }

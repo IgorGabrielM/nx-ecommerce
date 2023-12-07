@@ -22,6 +22,14 @@ export class AuthService {
         }
     }
 
+    async getUserLogged(): Promise<any> {
+        try {
+            return await this.supabase.auth.getUser();
+        } catch (error) {
+            return false;
+        }
+    }
+
     async signUpNewUser(user: UserAuthModel) {
         return await this.supabase.auth.signUp({
             email: user.email,

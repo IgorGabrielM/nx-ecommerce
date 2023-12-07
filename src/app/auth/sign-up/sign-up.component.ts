@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/services/auth.service';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { ShoppingCartService } from 'src/services/shopping-cart.service';
+import { UserDetailModel } from 'src/models/user.model';
+import { UserDetailService } from 'src/services/user.service';
 
 @Component({
   selector: 'nx-ecommerce-sign-up',
@@ -21,6 +24,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userDetailsService: UserDetailService,
+    private shoppingCartService: ShoppingCartService,
 
     private readonly fb: FormBuilder,
     private router: Router
@@ -39,11 +44,18 @@ export class SignUpComponent implements OnInit {
   async onSubmit(): Promise<void> {
     try {
       this.loading = true
-      this.authService.signUpNewUser(this.signUpForm.value).then((res: any) => {
-        this.loading = false
+      this.authService.signUpNewUser(this.signUpForm.value).then((res) => {
+        const userIdCreated = Number(res.data.user.identities[0].user_id)
+        console.log(res.data.user)
+        console.log(userIdCreated)
+        this.shoppingCartService.create({}).then((shoppingCart) => {
+          if (shoppingCart) {
+            const payload: UserDetailModel = { id_user: userIdCreated, id_position: 1, id_shopping_cart: Number(shoppingCart.data.id) }
+            this.userDetailsService.create(payload).then(() => this.loading = false)
+          }
+        })
         /*toast-> this.snackBar.open('Conta criada com sucesso', 'Fechar', { duration: 2000 }); */
       }, (err) => {
-        console.log(err)
         this.loading = false
       })
     }
