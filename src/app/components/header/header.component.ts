@@ -62,15 +62,19 @@ import {
 })
 export class HeaderComponent implements OnInit {
   showFiller: boolean = false;
+  positionId: number
 
   constructor(
     private authService: AuthService,
-
     private router: Router,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
+    this.getPosition()
+  }
+
+  getPosition() {
+    this.positionId = JSON.parse(localStorage.getItem('userData')).positionId
   }
 
   openCartShopping() {

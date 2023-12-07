@@ -14,12 +14,10 @@ export const appRoutes: Route[] = [
     {
         path: 'auth',
         component: AuthComponent,
-        children: [
-            {
-                path: 'sign-up',
-                component: SignUpComponent
-            }
-        ]
+    },
+    {
+        path: 'sign-up',
+        component: SignUpComponent
     },
     {
         path: 'home',

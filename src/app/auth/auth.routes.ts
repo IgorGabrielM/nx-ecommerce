@@ -7,8 +7,4 @@ export const authRoutes: Route[] = [
         path: '',
         component: AuthComponent,
     },
-    {
-        path: 'sign-up',
-        component: SignUpComponent,
-    },
 ];

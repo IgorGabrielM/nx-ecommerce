@@ -52,7 +52,7 @@
         </div>
 
         <!--Adicionar tratativa para que apenas os donos de lojas possam criar produtos-->
-        <a routerLink="../create-product">
+        <a routerLink="../create-product" *ngIf="positionId >= 2">
             <button hlmBtn class="w-fit flex justify-center items-center gap-3">
                 <i class="ph-bold ph-plus-circle text-xl"></i>
                 <p>Criar produto</p>
