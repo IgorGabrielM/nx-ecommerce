@@ -8,25 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/nx-ecommerce",
         "index": "./src/index.html",
         "main": "./src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "./tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "./src/favicon.ico",
-          "./src/assets"
-        ],
-        "styles": [
-          "./src/styles.scss"
-        ],
+        "assets": ["./src/favicon.ico", "./src/assets"],
+        "styles": ["./src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -76,21 +67,14 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "./src/**/*.ts",
-          "./src/**/*.html"
-        ]
+        "lintFilePatterns": ["./src/**/*.ts", "./src/**/*.html"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectName}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
         "jestConfig": "jest.config.app.ts"
       }
@@ -99,6 +83,22 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "nx-ecommerce:build"
+      }
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "nx-ecommerce:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "nx-ecommerce:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "nx-ecommerce:serve-static"
+        }
       }
     }
   }

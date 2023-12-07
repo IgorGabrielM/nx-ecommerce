@@ -1,12 +1,8 @@
 {
-  "ignorePatterns": [
-    "!**/*"
-  ],
+  "ignorePatterns": ["!**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "extends": [
         "plugin:@nx/angular",
         "plugin:@angular-eslint/template/process-inline-templates"
@@ -31,16 +27,14 @@
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@nx/angular-template"
-      ],
+      "files": ["*.html"],
+      "extends": ["plugin:@nx/angular-template"],
+      "rules": {}
+    },
+    {
+      "files": ["*.cy.{ts,js,tsx,jsx}", "cypress/**/*.{ts,js,tsx,jsx}"],
       "rules": {}
     }
   ],
-  "extends": [
-    "./.eslintrc.base.json"
-  ]
+  "extends": ["plugin:cypress/recommended"]
 }

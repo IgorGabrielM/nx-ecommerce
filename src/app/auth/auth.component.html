@@ -13,12 +13,13 @@
                         <input hlmInput id="password" data-testid="password" formControlName="password" class="w-3/5"
                             type="password" placeholder="Senha" />
                         <div class="w-3/5 text-ce ml-3">
-                            <span class="text-sm text-gray-400">Não possui conta? Crie uma <a routerLink="./sign-up"
+                            <span class="text-sm text-gray-400">Não possui conta? Crie uma <a routerLink="../sign-up"
                                     class="text-[color:var(--primary)]" data-testid="link-sign-up"> clicando
                                     aqui</a></span>
                         </div>
                     </div>
-                    <button hlmBtn type="submit" [class]="'w-64 h-10 mt-6 '+ (!signInForm.valid ? 'opacity-50' : '')"
+                    <button hlmBtn data-testid="button-signin" type="submit"
+                        [class]="'w-64 h-10 mt-6 '+ (!signInForm.valid ? 'opacity-50' : '')"
                         [disabled]="!loading && !signInForm.valid">
                         <p *ngIf="!loading">Entrar</p>
                         <div role="status" *ngIf="loading" class="flex justify-center">
