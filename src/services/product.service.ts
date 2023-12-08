@@ -17,6 +17,10 @@ export class ProductService {
         return await this.supabase.from('product').select()
     }
 
+    async find(id: number): Promise<PostgrestSingleResponse<ProductModel[]>> {
+        return await this.supabase.from('product').select("*").eq('id', id)
+    }
+
     async create(product: ProductModel) {
         return await this.supabase
             .from('product')

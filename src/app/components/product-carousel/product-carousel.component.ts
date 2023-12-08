@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductModel } from 'src/models/product.model';
 import { SwiperModule } from 'swiper/angular';
@@ -8,6 +8,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { ProductService } from 'src/services/product.service';
 import { ImageService } from 'src/services/image.service';
 import { ShoppingCartService } from 'src/services/shopping-cart.service';
+import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 
 @Component({
   selector: 'nx-ecommerce-product-carousel',
@@ -38,6 +39,7 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
     private imageService: ImageService,
     private shoppingCartService: ShoppingCartService,
 
+    private eventRealodShopingCartService: EventRealodShopingCartService,
 
     private cdr: ChangeDetectorRef
   ) { }
@@ -54,15 +56,14 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
 
   loadProducts() {
     this.productService.list().then(({ data: products }) => {
-      products.forEach(async (product) => {
-        product.image = (await this.imageService.getByPath(product.image)).data.publicUrl
-      })
+      products = this.imageService.loadImageForProducts(products)
       this.products = products
     })
   }
 
   insertOnShoppingCart(product: ProductModel) {
-    this.shoppingCartService.insertProduct(product).then()
+    this.shoppingCartService.insertProduct(product).then(() => {
+      this.eventRealodShopingCartService.sendEvent(true)
+    })
   }
-
 }

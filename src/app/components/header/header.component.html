@@ -2,26 +2,26 @@
     <brn-sheet-overlay hlm />
     <div hlmSheetContent *brnSheetContent="let ctx">
         <hlm-sheet-header>
-            <h3 brnSheetTitle hlm>Carrinho</h3>
-            <p brnSheetDescription hlm>Valor total: 100,00</p>
+            <h3 brnSheetTitle hlm>Meu Carrinho</h3>
+            <p brnSheetDescription hlm>Valor total: {{ getTotalValue()|number: '1.2-2' }}</p>
         </hlm-sheet-header>
 
         <div class="flex flex-col gap-4 my-4">
-            <section hlmCard>
-                <div hlmCardHeader>
-                    <h3 hlmCardTitle>Card Title</h3>
-                    <p hlmCardDescription>Card Description</p>
+            <section hlmCard *ngFor="let product of shoppingCart.products" class="relative">
+                <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imageUrl +')'">
                 </div>
-                <p hlmCardContent>Card Content</p>
-                <p hlmCardFooter>Card Footer</p>
-            </section>
-            <section hlmCard>
-                <div hlmCardHeader>
-                    <h3 hlmCardTitle>Card Title</h3>
-                    <p hlmCardDescription>Card Description</p>
+                <div class="flex justify-between items-center">
+                    <div hlmCardHeader>
+                        <h3 hlmCardTitle>{{ product.name }}</h3>
+                        <p hlmCardDescription>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
+                    </div>
+                    <input type="number" class="w-20 mr-5" id="quantity" [(ngModel)]="product.quantity"
+                        (change)="changeQuantity($event, product)">
                 </div>
-                <p hlmCardContent>Card Content</p>
-                <p hlmCardFooter>Card Footer</p>
+                <div class="w-8 h-8 absolute bg-[color:#7373ff] -top-2 -right-2 flex items-center justify-center rounded-full"
+                    (click)="removeProductOfShoppingCart(product.id)">
+                    <i class="ph-bold ph-x-circle text-xl text-center text-white"></i>
+                </div>
             </section>
         </div>
 
@@ -39,9 +39,12 @@
             <img src="../../../assets/nx-ecommerce-logo.png" alt="Logo do projeto" class="w-28 -my-6" />
         </a>
 
-        <button hlmBtn brnSheetTrigger side="right" class="w-36 flex justify-center items-center gap-3">
+        <button hlmBtn brnSheetTrigger side="right" class="w-36 flex justify-center items-center gap-3 relative">
             <span>Carrinho</span>
             <i class="ph-bold ph-shopping-cart-simple"></i>
+            <div class="absolute -right-1 -top-1 w-5 h-5 bg-[color:#3939E6] rounded-full text-white font-bold">
+                <p *ngIf="shoppingCart">{{ shoppingCart.products.length > 0 ? shoppingCart.products.length : 0 }}</p>
+            </div>
         </button>
 
         <div class="w-2/4 h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
@@ -64,17 +67,3 @@
         </button>
     </nav>
 </brn-sheet>
-
-
-<!--
-     <brn-sheet>
-    <brn-sheet-overlay hlm />
-    <button brnSheetTrigger>Edit Profile</button>
-    <div hlmSheetContent *brnSheetContent="let ctx">
-        <hlm-sheet-header>
-            <h3 brnSheetTitle hlm>Edit Profile</h3>
-            <p brnSheetDescription hlm>Make changes to your profile here. Click save when you're done.</p>
-        </hlm-sheet-header>
-    </div>
-</brn-sheet>
- -->

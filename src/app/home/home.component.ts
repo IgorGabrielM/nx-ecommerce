@@ -69,7 +69,9 @@ export class HomeComponent implements OnInit {
   loadProducts() {
     this.productService.list().then(({ data: products }) => {
       products.forEach(async (product) => {
-        product.image = (await this.imageService.getByPath(product.image)).data.publicUrl
+        if (product.image) {
+          product.image = (await this.imageService.getByPath(product.image)).data.publicUrl
+        }
       })
       this.products = products
     })
