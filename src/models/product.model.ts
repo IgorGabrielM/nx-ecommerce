@@ -8,5 +8,4 @@ export class ProductModel extends DefaultModel {
     id_category: number
     price: number
     discount?: number
-    quantity?: number
 }

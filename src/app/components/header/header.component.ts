@@ -90,29 +90,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getPosition()
     this.loadingShoppingCart()
+    this.getPosition()
   }
 
   getPosition() {
-    this.positionId = JSON.parse(localStorage.getItem('userData')).positionId
+    if (localStorage.getItem('userData')) {
+      this.positionId = JSON.parse(localStorage.getItem('userData')).positionId
+    }
   }
 
   loadingShoppingCart() {
-    const shoppingCartId = JSON.parse(localStorage.getItem('userData')).shoppingCartId
-    this.shoppingCartService.findWithQuantity(shoppingCartId).then((shoppingCart) => {
-      shoppingCart.products = this.imageService.loadImageForProducts(shoppingCart.products)
-      this.shoppingCart = shoppingCart
-    })
+    if (localStorage.getItem('userData')) {
+      const shoppingCartId = JSON.parse(localStorage.getItem('userData')).shoppingCartId
+      this.shoppingCartService.find(shoppingCartId).then(({ data: shoppingCart }) => {
+        shoppingCart[0].products = this.imageService.loadImageForProducts(shoppingCart[0].products)
+        this.shoppingCart = shoppingCart[0]
+      })
+    }
   }
 
-  removeProductOfShoppingCart(productId: string) {
-    const productsModified = this.shoppingCart.products.filter((product) => product.id !== productId)
-    this.shoppingCartService.update({ ...this.shoppingCart, products: productsModified }).then(({ data: shoppingCart }) => {
-      const newShoppingCart = shoppingCart[0]
-      newShoppingCart.products = this.imageService.loadImageForProducts(shoppingCart[0].products)
-      this.shoppingCart = newShoppingCart
-    })
+  removeProductOfShoppingCart(index: number) {
+    this.shoppingCart.products.splice(index, 1)
+    this.shoppingCartService.update(this.shoppingCart).then()
   }
 
   getTotalValue(): number {
@@ -123,23 +123,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return total
   }
 
+  getTotalValueWithoutDiscount(): number {
+    let total: number = 0
+    this.shoppingCart.products.forEach((product) => {
+      total += product.price
+    })
+    return total
+  }
+
   logout() {
     this.authService.signOut()
     localStorage.removeItem('token')
     localStorage.removeItem('userData')
     localStorage.removeItem('sb-wdbzebrfirgiirdyqgku-auth-token')
     this.router.navigate(['/auth'])
-  }
-
-  changeQuantity(ev: any, product: ProductModel) {
-    const evValue = ev.srcElement.value
-    const arrProductsQuantity = Array.from({ length: evValue }, () => ({ ...product, quantity: 0 }));
-
-    const arrFiltered = this.shoppingCart.products.filter((productCart) => productCart.id !== product.id)
-    const newArray = [...arrProductsQuantity, ...arrFiltered]
-
-    this.shoppingCart.products = newArray
-    console.log(newArray)
   }
 
   ngOnDestroy(): void {

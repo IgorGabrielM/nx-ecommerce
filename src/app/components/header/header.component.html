@@ -3,11 +3,10 @@
     <div hlmSheetContent *brnSheetContent="let ctx">
         <hlm-sheet-header>
             <h3 brnSheetTitle hlm>Meu Carrinho</h3>
-            <p brnSheetDescription hlm>Valor total: {{ getTotalValue()|number: '1.2-2' }}</p>
         </hlm-sheet-header>
 
-        <div class="flex flex-col gap-4 my-4">
-            <section hlmCard *ngFor="let product of shoppingCart.products" class="relative">
+        <div class="flex flex-col gap-4 my-4 overflow-y-auto h-5/6 p-4">
+            <section hlmCard *ngFor="let product of shoppingCart.products; let i = index" class="relative">
                 <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imageUrl +')'">
                 </div>
                 <div class="flex justify-between items-center">
@@ -15,17 +14,19 @@
                         <h3 hlmCardTitle>{{ product.name }}</h3>
                         <p hlmCardDescription>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
                     </div>
-                    <input type="number" class="w-20 mr-5" id="quantity" [(ngModel)]="product.quantity"
-                        (change)="changeQuantity($event, product)">
                 </div>
                 <div class="w-8 h-8 absolute bg-[color:#7373ff] -top-2 -right-2 flex items-center justify-center rounded-full"
-                    (click)="removeProductOfShoppingCart(product.id)">
+                    (click)="removeProductOfShoppingCart(i)">
                     <i class="ph-bold ph-x-circle text-xl text-center text-white"></i>
                 </div>
             </section>
         </div>
 
-        <hlm-sheet-footer>
+        <hlm-sheet-footer class="flex justify-between mt-2 pt-4 border-t border-gray-200">
+            <div class="w-full flex flex-col ml-5">
+                <p class="text-sm text-gray-500 line-through">R${{getTotalValueWithoutDiscount() | number:'1.2-2'}}</p>
+                <p class="text-lg text-green-700">R${{getTotalValue() | number:'1.2-2'}}</p>
+            </div>
             <button hlmBtn type="submit">Finalizar compra</button>
         </hlm-sheet-footer>
         <button brnSheetClose hlm hlmBtn variant='destructive'>

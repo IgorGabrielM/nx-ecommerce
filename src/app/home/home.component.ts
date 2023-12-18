@@ -19,6 +19,7 @@ import { ProductCarouselComponent } from '../components/product-carousel/product
 import { UserDetailService } from 'src/services/user.service';
 import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { ShoppingCartModel } from 'src/models/shoppingCart.model';
+import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -46,7 +47,9 @@ export class HomeComponent implements OnInit {
     private categoryService: CategoryService,
     private imageService: ImageService,
     private userDetailService: UserDetailService,
-    private shoppingCartService: ShoppingCartService
+    private shoppingCartService: ShoppingCartService,
+
+    private eventRealodShopingCartService: EventRealodShopingCartService,
   ) { }
 
   ngOnInit() {
@@ -62,6 +65,7 @@ export class HomeComponent implements OnInit {
         this.shoppingCart = shoppingCart[0]
         const userData = { shoppingCartId: shoppingCart[0].id, userDetailId: userDetail[0].id, positionId: userDetail[0].id_position }
         localStorage.setItem('userData', JSON.stringify(userData))
+        setTimeout(() => this.eventRealodShopingCartService.sendEvent(true), 500)
       })
     })
   }
