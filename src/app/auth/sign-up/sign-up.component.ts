@@ -64,26 +64,24 @@ export class SignUpComponent {
     try {
       this.loading = true
       this.authService.signUpNewUser(this.signUpForm.value).then((res) => {
-        const userIdCreated = Number(res.data.user.identities[0].user_id)
-        this.authService.signInWithEmail({ email: this.signUpForm.value.email, password: this.signUpForm.value.email }).then(() => {
-          this.shoppingCartService.create({ products: [] }).then((shoppingCart) => {
-            if (shoppingCart && shoppingCart.data) {
-              const payload: UserDetailModel = { id_user: userIdCreated, id_position: 1, id_shopping_cart: Number((shoppingCart.data as any).id), image: this.fileUrl.path }
-              this.userDetailsService.create(payload).then(() => {
-                this.loading = false
-                this.router.navigate(['/home'])
-              })
-            }
-          })
+        const userIdCreated = res.data.user.identities[0].user_id
+        this.shoppingCartService.create({ products: [] }).then((shoppingCart) => {
+          if (shoppingCart && shoppingCart.data) {
+            const payload: UserDetailModel = { id_user: userIdCreated, username: this.signUpForm.value.name, id_position: 1, id_shopping_cart: Number((shoppingCart.data[0] as any).id), image: this.fileUrl.path }
+            this.userDetailsService.create(payload).then(() => {
+              this.loading = false
+              this.router.navigate(['/home'])
+            })
+          }
         })
         /*toast-> this.snackBar.open('Conta criada com sucesso', 'Fechar', { duration: 2000 }); */
       }, (err) => {
         this.loading = false
+        this.signUpForm.reset()
+        this.fileUrl = undefined
       })
     }
     finally {
-      this.signUpForm.reset()
-      this.fileUrl = undefined
     }
   }
 

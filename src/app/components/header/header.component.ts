@@ -36,6 +36,7 @@ import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-s
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ProductModel } from 'src/models/product.model';
+import { UserDetailService } from 'src/services/user.service';
 
 
 @Component({
@@ -74,11 +75,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   shoppingCart: ShoppingCartModel
   showFiller: boolean = false;
   positionId: number
+  userImageUrl: string
 
   constructor(
     private authService: AuthService,
     private shoppingCartService: ShoppingCartService,
     private imageService: ImageService,
+    private userDetailsService: UserDetailService,
 
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
@@ -92,12 +95,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadingShoppingCart()
     this.getPosition()
+    this.loadImage()
   }
 
   getPosition() {
     if (localStorage.getItem('userData')) {
       this.positionId = JSON.parse(localStorage.getItem('userData')).positionId
     }
+  }
+
+  loadImage() {
+    this.userDetailsService.find(JSON.parse(localStorage.getItem('userData')).userDetailId).then(({ data: user }) => {
+      this.imageService.getByPath(user[0].image).then(({ data: image }) => this.userImageUrl = image.publicUrl)
+    })
   }
 
   loadingShoppingCart() {

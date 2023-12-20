@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
 
   loadUserData() {
     const userLogedId: string = JSON.parse(localStorage.getItem('sb-wdbzebrfirgiirdyqgku-auth-token')).user.identities[0].user_id
-    this.userDetailService.find(userLogedId).then(({ data: userDetail }) => {
+    this.userDetailService.findByIdUser(userLogedId).then(({ data: userDetail }) => {
       this.shoppingCartService.find(Number(userDetail[0].id_shopping_cart)).then(({ data: shoppingCart }) => {
         this.shoppingCart = shoppingCart[0]
         const userData = { shoppingCartId: shoppingCart[0].id, userDetailId: userDetail[0].id, positionId: userDetail[0].id_position }

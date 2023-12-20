@@ -14,10 +14,11 @@ export class ShoppingCartService {
         this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
     }
 
-    async create(payload: ShoppingCartModel): Promise<PostgrestSingleResponse<ShoppingCartModel>> {
-        return await this.supabase
+    async create(payload: ShoppingCartModel): Promise<PostgrestSingleResponse<ShoppingCartModel[]>> {
+        const response = await this.supabase
             .from('shopping_cart')
-            .insert(payload)
+            .insert(payload).select('*');
+        return response;
     }
 
     async find(id: number): Promise<PostgrestSingleResponse<ShoppingCartModel[]>> {

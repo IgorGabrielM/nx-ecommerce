@@ -13,8 +13,12 @@ export class UserDetailService {
         this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
     }
 
-    async find(userId: string): Promise<PostgrestSingleResponse<UserDetailModel[]>> {
-        return await this.supabase.from('user_detail').select("*").eq('id_user', userId)
+    async find(id: number): Promise<PostgrestSingleResponse<UserDetailModel[]>> {
+        return await this.supabase.from('user_detail').select("*").eq('id', id).select('*')
+    }
+
+    async findByIdUser(userId: string): Promise<PostgrestSingleResponse<UserDetailModel[]>> {
+        return await this.supabase.from('user_detail').select("*").eq('id_user', userId).select('*')
     }
 
     async create(payload: UserDetailModel) {
