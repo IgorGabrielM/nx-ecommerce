@@ -18,7 +18,11 @@ export class ImageService {
     }
 
     async uploadImage(image) {
-        return await this.supabase.storage.from('ecommerce').upload(`product_${Date.now()}.png`, image)
+        return await this.supabase.storage.from('ecommerce').upload(`products/product_${Date.now()}.png`, image)
+    }
+
+    async uploadImageUser(image) {
+        return await this.supabase.storage.from('ecommerce').upload(`users/user_${Date.now()}.png`, image)
     }
 
     loadImageForProducts(products: ProductModel[]): ProductModel[] {

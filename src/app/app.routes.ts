@@ -1,9 +1,5 @@
 import { Route } from '@angular/router';
 import { AuthGuard } from 'src/guard/auth.guard';
-import { AuthComponent } from './auth/auth.component';
-import { HomeComponent } from './home/home.component';
-import { SignUpComponent } from './auth/sign-up/sign-up.component';
-import { CreateProductComponent } from './create-product/create-product.component';
 
 export const appRoutes: Route[] = [
     {
@@ -13,20 +9,20 @@ export const appRoutes: Route[] = [
     },
     {
         path: 'auth',
-        component: AuthComponent,
+        loadComponent: () => import('../app/auth/auth.component').then((c => c.AuthComponent))
     },
     {
         path: 'sign-up',
-        component: SignUpComponent
+        loadComponent: () => import('../app/auth/sign-up/sign-up.component').then((c => c.SignUpComponent))
     },
     {
         path: 'home',
-        component: HomeComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        loadComponent: () => import('../app/home/home.component').then((c => c.HomeComponent))
     },
     {
         path: 'create-product',
-        component: CreateProductComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        loadComponent: () => import('../app/create-product/create-product.component').then((c => c.CreateProductComponent))
     },
 ];

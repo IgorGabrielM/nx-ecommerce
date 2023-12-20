@@ -8,6 +8,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { UserDetailModel } from 'src/models/user.model';
 import { UserDetailService } from 'src/services/user.service';
+import { ImageService } from 'src/services/image.service';
 
 @Component({
   selector: 'nx-ecommerce-sign-up',
@@ -17,8 +18,13 @@ import { UserDetailService } from 'src/services/user.service';
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent {
   loading: boolean = false
+
+  fileUrl: {
+    urlObj: string
+    path: string
+  }
 
   signUpForm: FormGroup
 
@@ -26,11 +32,13 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService,
     private userDetailsService: UserDetailService,
     private shoppingCartService: ShoppingCartService,
+    private imageService: ImageService,
 
     private readonly fb: FormBuilder,
     private router: Router
   ) {
     this.signUpForm = this.fb.group({
+      image: [''],
       name: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -38,7 +46,18 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  onFileChange(event: any) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.fileUrl = { path: '', urlObj: '' }
+
+      this.signUpForm.value.image = fileList[0];
+      this.fileUrl.urlObj = URL.createObjectURL(this.signUpForm.value.image)
+      this.imageService.uploadImageUser(this.signUpForm.value.image).then(({ data: img }) => {
+        this.fileUrl.path = img.path
+        this.signUpForm.value.image = img.path
+      })
+    }
   }
 
   async onSubmit(): Promise<void> {
@@ -46,13 +65,16 @@ export class SignUpComponent implements OnInit {
       this.loading = true
       this.authService.signUpNewUser(this.signUpForm.value).then((res) => {
         const userIdCreated = Number(res.data.user.identities[0].user_id)
-        console.log(res.data.user)
-        console.log(userIdCreated)
-        this.shoppingCartService.create({}).then((shoppingCart) => {
-          if (shoppingCart) {
-            const payload: UserDetailModel = { id_user: userIdCreated, id_position: 1, id_shopping_cart: Number(shoppingCart.data.id) }
-            this.userDetailsService.create(payload).then(() => this.loading = false)
-          }
+        this.authService.signInWithEmail({ email: this.signUpForm.value.email, password: this.signUpForm.value.email }).then(() => {
+          this.shoppingCartService.create({ products: [] }).then((shoppingCart) => {
+            if (shoppingCart && shoppingCart.data) {
+              const payload: UserDetailModel = { id_user: userIdCreated, id_position: 1, id_shopping_cart: Number((shoppingCart.data as any).id), image: this.fileUrl.path }
+              this.userDetailsService.create(payload).then(() => {
+                this.loading = false
+                this.router.navigate(['/home'])
+              })
+            }
+          })
         })
         /*toast-> this.snackBar.open('Conta criada com sucesso', 'Fechar', { duration: 2000 }); */
       }, (err) => {
@@ -61,6 +83,7 @@ export class SignUpComponent implements OnInit {
     }
     finally {
       this.signUpForm.reset()
+      this.fileUrl = undefined
     }
   }
 
