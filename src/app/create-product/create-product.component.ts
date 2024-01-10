@@ -11,7 +11,7 @@ import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
 import { CategoryService } from 'src/services/category.service';
 import { CategoryModel } from 'src/models/category.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 type Framework = { label: string; value: string };
@@ -44,7 +44,7 @@ export class CreateProductComponent implements OnInit {
 
   categories: CategoryModel[] = []
   currentCategory: CategoryModel | undefined
-  productId: number
+  productId: string
 
   public state = signal<'closed' | 'open'>('closed');
 
@@ -55,6 +55,7 @@ export class CreateProductComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
 
     private readonly fb: FormBuilder,
+    private router: Router
   ) {
     this.formData = this.fb.group({
       name: ['', Validators.required],
@@ -74,7 +75,7 @@ export class CreateProductComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.productId = params['id'];
       if (this.productId) {
-        this.productService.find(this.productId).then(({ data: product }) => {
+        this.productService.find(this.productId).then(async ({ data: product }) => {
           if (product) {
             this.formData = this.fb.group({
               name: [product[0].name, Validators.required],
@@ -86,7 +87,8 @@ export class CreateProductComponent implements OnInit {
             this.fileUrl = {
               urlObj: this.imageService.getByPath(product[0].image).data.publicUrl,
               path: product[0].image
-            }
+            };
+            this.currentCategory = (await this.categoryService.find(product[0].id_category.toString())).data[0]
           }
         })
       }
@@ -126,11 +128,21 @@ export class CreateProductComponent implements OnInit {
     }
   }
 
+  delete() {
+    this.productService.delete(this.productId).then(() => {
+      this.router.navigate(['/home'])
+    })
+  }
+
   onSubmit() {
     if (!this.productId) {
-      this.productService.create({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id }).then()
+      this.productService.create({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id }).then(() => {
+        this.router.navigate(['/home'])
+      })
     } else {
-      this.productService.update({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id, id: this.productId }).then()
+      this.productService.update({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id, id: this.productId }).then(() => {
+        this.router.navigate(['/home'])
+      })
     }
   }
 }

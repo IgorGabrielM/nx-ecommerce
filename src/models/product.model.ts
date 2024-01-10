@@ -1,3 +1,4 @@
+import { CommentModel } from "./comment.model";
 import { DefaultModel } from "./default.model";
 
 export class ProductModel extends DefaultModel {
@@ -8,4 +9,5 @@ export class ProductModel extends DefaultModel {
     id_category: number
     price: number
     discount?: number
+    comments?: CommentModel[]
 }

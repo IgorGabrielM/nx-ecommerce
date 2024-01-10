@@ -21,7 +21,7 @@ export class ProductService {
         return await this.supabase.from('product').select("*").eq("id_category", categoryId)
     }
 
-    async find(id: number): Promise<PostgrestSingleResponse<ProductModel[]>> {
+    async find(id: string): Promise<PostgrestSingleResponse<ProductModel[]>> {
         return await this.supabase.from('product').select("*").eq('id', id)
     }
 
@@ -31,6 +31,10 @@ export class ProductService {
 
     async update(product: ProductModel): Promise<PostgrestSingleResponse<ProductModel>> {
         return await this.supabase.from('product').update(product).eq('id', product.id)
+    }
+
+    async delete(productId: string): Promise<PostgrestSingleResponse<ProductModel>> {
+        return await this.supabase.from('product').delete().eq('id', productId)
     }
 
     async create(product: ProductModel) {

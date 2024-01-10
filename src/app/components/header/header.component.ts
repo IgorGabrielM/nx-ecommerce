@@ -37,6 +37,7 @@ import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 import { UserDetailService } from 'src/services/user.service';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component'
+import { PurchaseService } from 'src/services/purchase.service';
 
 @Component({
   selector: 'nx-ecommerce-header',
@@ -82,6 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private shoppingCartService: ShoppingCartService,
     private imageService: ImageService,
     private userDetailsService: UserDetailService,
+    private purchaseService: PurchaseService,
 
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
@@ -105,9 +107,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   loadImage() {
-    this.userDetailsService.find(JSON.parse(localStorage.getItem('userData')).userDetailId).then(({ data: user }) => {
-      this.userImageUrl = this.imageService.getByPath(user[0].image).data.publicUrl
-    })
+    setTimeout(() => {
+      this.userDetailsService.find(JSON.parse(localStorage.getItem('userData')).userDetailId).then(({ data: user }) => {
+        this.userImageUrl = this.imageService.getByPath(user[0].image).data.publicUrl
+      })
+    }, 1000)
   }
 
   loadingShoppingCart() {
@@ -139,6 +143,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       total += product.price
     })
     return total
+  }
+
+  purchaseShoppingCart() {
+    this.purchaseService.create({ shopping_cart_id: Number(this.shoppingCart.id), products: this.shoppingCart.products })
+    this.shoppingCart = { ...this.shoppingCart, products: [] }
+    this.shoppingCartService.update(this.shoppingCart).then(() => {
+      //rota para pós compra
+    })
   }
 
   logout() {

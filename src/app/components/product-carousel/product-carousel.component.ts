@@ -45,7 +45,6 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
   constructor(
     private imageService: ImageService,
     private shoppingCartService: ShoppingCartService,
-
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
     private cdr: ChangeDetectorRef,
@@ -59,9 +58,9 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.widthSwiper = this.swiperContainer.nativeElement.offsetWidth;
-    if (this.widthSwiper > 400 && this.widthSwiper < 600) {
+    if (this.widthSwiper > 400 && this.widthSwiper < 650) {
       this.widthSwiper = this.widthSwiper / 2
-    } else if (this.widthSwiper > 600) {
+    } else if (this.widthSwiper > 650) {
       this.widthSwiper = this.widthSwiper / 4
     }
     this.cdr.detectChanges();
@@ -72,6 +71,9 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
   }
 
   insertOnShoppingCart(product: ProductModel) {
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 10)
     this.shoppingCartService.insertProduct(product).then(() => {
       this.eventRealodShopingCartService.sendEvent(true)
     })

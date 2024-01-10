@@ -17,4 +17,7 @@ export class CategoryService {
         return await this.supabase.from('category').select()
     }
 
+    async find(id: string): Promise<PostgrestSingleResponse<CategoryModel[]>> {
+        return await this.supabase.from('category').select("*").eq('id', id)
+    }
 }
