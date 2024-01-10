@@ -1,5 +1,5 @@
 <nx-ecommerce-header></nx-ecommerce-header>
-<div class="h-screen flex justify-center items-center">
+<div class="w-full h-fit flex justify-center items-center">
     <form class="max-w-md p-6 bg-white rounded-md shadow-md" [formGroup]="formData">
         <div class="mb-4">
             <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
@@ -34,8 +34,14 @@
         <img *ngIf="fileUrl" [src]="fileUrl.urlObj" class="mb-4" />
 
         <div class="mb-4">
-            <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price:</label>
+            <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Preço:</label>
             <input type="number" id="price" name="price" formControlName="price"
+                class="w-full px-3 py-2 border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label for="discount" class="block text-gray-700 text-sm font-bold mb-2">Desconto:</label>
+            <input type="number" id="discount" name="discount" formControlName="discount"
                 class="w-full px-3 py-2 border rounded-md">
         </div>
 
@@ -63,6 +69,8 @@
             </brn-popover>
         </div>
 
-        <button hlmBtn type="submit" (click)="onSubmit()">Submit</button>
+        <div class="w-full flex justify-end border-t-2 border-gray-200 mt-2">
+            <button hlmBtn type="submit" (click)="onSubmit()" class="mt-2">Submit</button>
+        </div>
     </form>
 </div>

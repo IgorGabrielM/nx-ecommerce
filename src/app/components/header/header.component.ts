@@ -1,8 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from 'src/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import {
+  HlmCardContentDirective,
+  HlmCardDescriptionDirective,
+  HlmCardDirective,
+  HlmCardFooterDirective,
+  HlmCardHeaderDirective,
+  HlmCardTitleDirective,
+} from '@spartan-ng/ui-card-helm';
 import {
   BrnSheetCloseDirective,
   BrnSheetComponent,
@@ -21,23 +29,14 @@ import {
   HlmSheetOverlayDirective,
   HlmSheetTitleDirective,
 } from '@spartan-ng/ui-sheet-helm';
-import {
-  HlmCardContentDirective,
-  HlmCardDescriptionDirective,
-  HlmCardDirective,
-  HlmCardFooterDirective,
-  HlmCardHeaderDirective,
-  HlmCardTitleDirective,
-} from '@spartan-ng/ui-card-helm';
-import { ShoppingCartService } from 'src/services/shopping-cart.service';
-import { ShoppingCartModel } from 'src/models/shoppingCart.model';
-import { ImageService } from 'src/services/image.service';
-import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 import { Subscription } from 'rxjs';
-import { FormsModule } from '@angular/forms';
-import { ProductModel } from 'src/models/product.model';
+import { ShoppingCartModel } from 'src/models/shoppingCart.model';
+import { AuthService } from 'src/services/auth.service';
+import { ImageService } from 'src/services/image.service';
+import { ShoppingCartService } from 'src/services/shopping-cart.service';
+import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 import { UserDetailService } from 'src/services/user.service';
-
+import { SearchBarComponent } from '../../components/search-bar/search-bar.component'
 
 @Component({
   selector: 'nx-ecommerce-header',
@@ -65,7 +64,8 @@ import { UserDetailService } from 'src/services/user.service';
     HlmCardFooterDirective,
     HlmCardHeaderDirective,
     HlmCardTitleDirective,
-    RouterModule],
+    RouterModule,
+    SearchBarComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -106,7 +106,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   loadImage() {
     this.userDetailsService.find(JSON.parse(localStorage.getItem('userData')).userDetailId).then(({ data: user }) => {
-      this.imageService.getByPath(user[0].image).then(({ data: image }) => this.userImageUrl = image.publicUrl)
+      this.userImageUrl = this.imageService.getByPath(user[0].image).data.publicUrl
     })
   }
 

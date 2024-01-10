@@ -17,8 +17,20 @@ export class ProductService {
         return await this.supabase.from('product').select()
     }
 
+    async listByCategory(categoryId: string): Promise<PostgrestSingleResponse<ProductModel[]>> {
+        return await this.supabase.from('product').select("*").eq("id_category", categoryId)
+    }
+
     async find(id: number): Promise<PostgrestSingleResponse<ProductModel[]>> {
         return await this.supabase.from('product').select("*").eq('id', id)
+    }
+
+    async search(str: string): Promise<PostgrestSingleResponse<ProductModel[]>> {
+        return await this.supabase.from('product').select("*").ilike('name', `%${str}%`)
+    }
+
+    async update(product: ProductModel): Promise<PostgrestSingleResponse<ProductModel>> {
+        return await this.supabase.from('product').update(product).eq('id', product.id)
     }
 
     async create(product: ProductModel) {

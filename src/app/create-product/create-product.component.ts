@@ -11,6 +11,7 @@ import { HlmPopoverContentDirective } from '@spartan-ng/ui-popover-helm';
 import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
 import { CategoryService } from 'src/services/category.service';
 import { CategoryModel } from 'src/models/category.model';
+import { ActivatedRoute } from '@angular/router';
 
 
 type Framework = { label: string; value: string };
@@ -38,19 +39,20 @@ export class CreateProductComponent implements OnInit {
 
   fileUrl: {
     urlObj: string
-    path: string
+    path?: string
   }
 
   categories: CategoryModel[] = []
   currentCategory: CategoryModel | undefined
+  productId: number
 
   public state = signal<'closed' | 'open'>('closed');
-
 
   constructor(
     private imageService: ImageService,
     private productService: ProductService,
     private categoryService: CategoryService,
+    private activatedRoute: ActivatedRoute,
 
     private readonly fb: FormBuilder,
   ) {
@@ -59,11 +61,36 @@ export class CreateProductComponent implements OnInit {
       description: ['', Validators.required],
       image: ['', Validators.required],
       price: [0, Validators.required],
+      discount: [0],
     });
   }
 
   ngOnInit() {
+    this.getQuerryParam()
     this.loadCategories()
+  }
+
+  getQuerryParam() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.productId = params['id'];
+      if (this.productId) {
+        this.productService.find(this.productId).then(({ data: product }) => {
+          if (product) {
+            this.formData = this.fb.group({
+              name: [product[0].name, Validators.required],
+              description: [product[0].description, Validators.required],
+              image: [product[0].image, Validators.required],
+              price: [product[0].price, Validators.required],
+              discount: [product[0].discount],
+            });
+            this.fileUrl = {
+              urlObj: this.imageService.getByPath(product[0].image).data.publicUrl,
+              path: product[0].image
+            }
+          }
+        })
+      }
+    });
   }
 
   loadCategories() {
@@ -100,6 +127,10 @@ export class CreateProductComponent implements OnInit {
   }
 
   onSubmit() {
-    this.productService.create({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id }).then()
+    if (!this.productId) {
+      this.productService.create({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id }).then()
+    } else {
+      this.productService.update({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id, id: this.productId }).then()
+    }
   }
 }

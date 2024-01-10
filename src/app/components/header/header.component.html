@@ -1,4 +1,4 @@
-<brn-sheet>
+<brn-sheet class="hidden md:block">
     <brn-sheet-overlay hlm />
     <div hlmSheetContent *brnSheetContent="let ctx">
         <hlm-sheet-header>
@@ -47,13 +47,14 @@
                 <p *ngIf="shoppingCart">{{ shoppingCart.products.length > 0 ? shoppingCart.products.length : 0 }}</p>
             </div>
         </button>
+        <nx-ecommerce-search-bar></nx-ecommerce-search-bar>
 
-        <div class="w-2/4 h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
+        <!--         <div class="w-2/4 h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
             <input type="search" id="default-search"
                 class="block w-full h-full ps-10 text-sm text-gray-900 rounded-full bg-transparent]"
-                placeholder="Procurar" required>
+                placeholder="Procurar" (input)="onInput($event)" [(ngModel)]="searchStr">
             <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
-        </div>
+        </div> -->
 
         <!--Adicionar tratativa para que apenas os donos de lojas possam criar produtos-->
         <a routerLink="../create-product" *ngIf="positionId >= 2">
@@ -75,7 +76,7 @@
                         fill="currentFill" />
                 </svg>
             </div>
-            <img *ngIf="userImageUrl" [src]="userImageUrl" class="w-12 h-12 rounded-full m-2" />
+            <img *ngIf="userImageUrl" alt="Imagem do usuário" [src]="userImageUrl" class="w-12 h-12 rounded-full m-2" />
         </div>
 
         <button hlmBtn (click)="logout()" class="w-10 flex justify-center items-center gap-3">
@@ -83,3 +84,97 @@
         </button>
     </nav>
 </brn-sheet>
+
+<div class="w-full border-b-2 border-purple-300 flex justify-between items-center md:hidden">
+    <p class="text-xl font-bold"><span class="text-purple-600 ml-2 mr-1 font-extrabold text-2xl">NX</span>ecommerce</p>
+    <brn-sheet class="w-10 mr-2 my-1">
+        <brn-sheet-overlay hlm />
+        <div hlmSheetContent *brnSheetContent="let ctx" class="overflow-y-scroll h-screen">
+            <hlm-sheet-header>
+                <div class="w-full px-7 h-fit flex justify-between items-center">
+                    <a routerLink="/home">
+                        <img src="../../../assets/nx-ecommerce-logo.png" alt="Logo do projeto" class="w-20 -my-1" />
+                    </a>
+
+                    <img *ngIf="userImageUrl" alt="Imagem do usuário" [src]="userImageUrl"
+                        class="w-12 h-12 rounded-full m-2" />
+                </div>
+            </hlm-sheet-header>
+
+            <nav class="flex flex-col gap-2 items-center py-3 border-b-2 border-indigo-400">
+                <!--                 <div
+                    class="w-full h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
+                    <input type="search" id="default-search"
+                        class="block w-full h-full ps-10 text-sm text-gray-900 rounded-full bg-transparent"
+                        placeholder="Procurar" required>
+                    <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
+                </div> -->
+
+                <a routerLink="../create-product" *ngIf="positionId >= 2" class="w-full">
+                    <button hlmBtn class="w-full flex justify-center items-center gap-3">
+                        <i class="ph-bold ph-plus-circle text-xl"></i>
+                        <p>Criar produto</p>
+                    </button>
+                </a>
+
+                <p class="w-full text-start font-bold text-lg">Meu carrinho:</p>
+                <div class="w-full flex flex-col gap-4 my-2 overflow-y-auto p-4">
+                    <section hlmCard *ngFor="let product of shoppingCart.products; let i = index" class="relative">
+                        <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imageUrl +')'">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div hlmCardHeader>
+                                <h3 hlmCardTitle>{{ product.name }}</h3>
+                                <p hlmCardDescription>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 absolute bg-[color:#7373ff] -top-2 -right-2 flex items-center justify-center rounded-full"
+                            (click)="removeProductOfShoppingCart(i)">
+                            <i class="ph-bold ph-x-circle text-xl text-center text-white"></i>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="px-2 flex justify-center items-center">
+                    <div *ngIf="!userImageUrl"
+                        class="w-12 h-12 rounded-full bg-slate-200 flex justify-center items-center m-2">
+                        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin fill-white"
+                            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                fill="currentColor" />
+                            <path
+                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                fill="currentFill" />
+                        </svg>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="flex justify-between items-center">
+                <div class="w-full flex flex-col ml-5">
+                    <p class="text-sm text-gray-500 line-through">R${{getTotalValueWithoutDiscount() | number:'1.2-2'}}
+                    </p>
+                    <p class="text-lg text-green-700">R${{getTotalValue() | number:'1.2-2'}}</p>
+                </div>
+                <button hlmBtn type="submit">Finalizar compra</button>
+            </div>
+
+            <hlm-sheet-footer class="flex justify-between mt-2 pt-4 border-t border-gray-200">
+                <button hlmBtn variant='destructive' (click)="logout()"
+                    class="w-full flex justify-center items-center shadow-md shadow-red-500">
+                    <i class="ph-bold ph-sign-out text-xl"></i>
+                </button>
+            </hlm-sheet-footer>
+
+            <button brnSheetClose hlm hlmBtn variant='destructive' class="w-2 h-8 shadow-md shadow-red-500">
+                <span class="sr-only">Close</span>
+                <i class="ph-bold ph-x-circle text-xl"></i>
+            </button>
+        </div>
+
+        <button hlmBtn brnSheetTrigger class="w-10 h-10 bg-transparent px-2 mr-2">
+            <i class="ph-bold ph-list text-3xl"></i>
+        </button>
+    </brn-sheet>
+</div>

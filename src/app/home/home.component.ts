@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../components/header/header.component';
 import { SwiperModule } from 'swiper/angular';
@@ -20,6 +20,7 @@ import { UserDetailService } from 'src/services/user.service';
 import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { ShoppingCartModel } from 'src/models/shoppingCart.model';
 import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
+import { CategoryModel } from 'src/models/category.model';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -39,6 +40,7 @@ import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-s
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  categoriesWithProducts: { category: CategoryModel, products: ProductModel[] }[] = []
   products: ProductModel[] = [];
   shoppingCart: ShoppingCartModel
 
@@ -54,7 +56,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loadUserData()
-    this.loadProducts()
     this.loadCategories()
   }
 
@@ -70,19 +71,18 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  loadProducts() {
-    this.productService.list().then(({ data: products }) => {
-      products.forEach(async (product) => {
-        if (product.image) {
-          product.image = (await this.imageService.getByPath(product.image)).data.publicUrl
-        }
+  loadCategories() {
+    this.categoryService.list().then(({ data: categories }) => {
+      categories.forEach((category) => {
+        this.productService.listByCategory(category.id).then(({ data: products }) => {
+          this.categoriesWithProducts.push({ category, products })
+        })
       })
-      this.products = products
     })
   }
 
-  loadCategories() {
-    this.categoryService.list().then(({ data: categories }) => { })
+  sortedCategories(): { category: CategoryModel; products: ProductModel[]; }[] {
+    return this.categoriesWithProducts.sort((a, b) => Number(a.category.id) - Number(b.category.id))
   }
 
 }

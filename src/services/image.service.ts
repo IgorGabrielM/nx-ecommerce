@@ -13,8 +13,8 @@ export class ImageService {
         this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
     }
 
-    async getByPath(path: string) {
-        return await this.supabase.storage.from('ecommerce').getPublicUrl(path)
+    getByPath(path: string) {
+        return this.supabase.storage.from('ecommerce').getPublicUrl(path)
     }
 
     async uploadImage(image) {

@@ -1,0 +1,12 @@
+.zoom-container {
+  overflow: hidden;
+  position: absolute;
+  right: -80px;
+  bottom: -50px;
+  width: 150px;
+  height: 100px;
+}
+
+img {
+  transition: transform 0.3s ease-out;
+}

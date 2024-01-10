@@ -21,6 +21,11 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('../app/home/home.component').then((c => c.HomeComponent))
     },
     {
+        path: 'product-information',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('../app/components/product-carousel/product-information/product-information.component').then((c => c.ProductInformationComponent))
+    },
+    {
         path: 'create-product',
         canActivate: [AuthGuard],
         loadComponent: () => import('../app/create-product/create-product.component').then((c => c.CreateProductComponent))
