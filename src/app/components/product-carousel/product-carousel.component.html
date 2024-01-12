@@ -1,49 +1,73 @@
-<h2 *ngIf="categoryWithProduct.category" class="text-xl font-bold mt-2">{{ categoryWithProduct.category.name }}
-</h2>
-<div class="w-full md:mx-2" #swiperContainer>
-    <swiper *ngIf="categoryWithProduct.products && categoryWithProduct.products.length" [slidesPerView]="10"
-        [initialSlide]="0" [config]="{ width: widthSwiper }">
-        <ng-template *ngFor="let product of categoryWithProduct.products" swiperSlide class="w-fit">
-            <div
-                class="py-2 xl:w-72 lg:w-52 md:w-40 h-96 mx-5 rounded-xl border overflow-hidden bg-white shadow-md shadow-slate-400 my-5">
-                <div class="relative" [routerLink]="['/product-information']" [queryParams]="{ id: product.id }">
-                    <img class="w-full h-48 rounded-t-lg object-cover" [src]="product.imageUrl" alt="Imagem do produto">
+<div *ngIf="!minimized">
+    <h2 *ngIf="categoryWithProduct.category" class="text-xl font-bold mt-2">{{ categoryWithProduct.category.name }}</h2>
+    <div class="w-full md:mx-2" #swiperContainer>
+        <swiper *ngIf="categoryWithProduct.products && categoryWithProduct.products.length" [slidesPerView]="10"
+            [initialSlide]="0" [config]="{ width: widthSwiper }">
+            <ng-template *ngFor="let product of categoryWithProduct.products" swiperSlide class="w-fit">
+                <div
+                    class="py-2 xl:w-72 lg:w-52 md:w-40 h-96 mx-5 rounded-xl border overflow-hidden bg-white shadow-md shadow-slate-400 my-5">
+                    <div class="relative" [routerLink]="['/product-information']" [queryParams]="{ id: product.id }">
+                        <img class="w-full h-48 rounded-t-lg object-cover" [src]="product.imageUrl"
+                            alt="Imagem do produto">
 
-                    <button id="insert-in-shopping-cart" variant="outline" hlmBtn
-                        class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute bottom-2 right-2 z-50"
-                        (click)="insertOnShoppingCart(product)">
-                        <i class="ph-bold ph-shopping-cart-simple text-white"></i>
-                    </button>
+                        <button id="insert-in-shopping-cart" variant="outline" hlmBtn
+                            class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute bottom-2 right-2 z-50"
+                            (click)="insertOnShoppingCart(product)">
+                            <i class="ph-bold ph-shopping-cart-simple text-white"></i>
+                        </button>
 
-                    <button variant="outline" hlmBtn
-                        class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute top-0 right-2 z-50"
-                        (click)="editProduct(product.id)" *ngIf="positionId >= 2">
-                        <i class="ph-fill ph-pencil-simple text-white"></i>
-                    </button>
-                </div>
+                        <button variant="outline" hlmBtn
+                            class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute top-0 right-2 z-50"
+                            (click)="editProduct(product.id)" *ngIf="positionId >= 2">
+                            <i class="ph-fill ph-pencil-simple text-white"></i>
+                        </button>
+                    </div>
 
-                <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2">{{ product.name }}</div>
-                    <p class="text-gray-700 text-base">
-                        {{product.description}}
-                    </p>
-                </div>
-
-                <div class="px-6 pt-4 pb-2" *ngIf="product.discount">
-                    <div class="flex items-center gap-4">
-                        <p class="text-gray-800 font-bold text-xl">R${{ (product.price - product.discount) |
-                            number:'1.2-2' }}</p>
-                        <p class="text-gray-500 text-sm uppercase">-R${{ product.discount | number:'1.2-2' }}
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-xl mb-2">{{ product.name }}</div>
+                        <p class="text-gray-700 text-base">
+                            {{product.description}}
                         </p>
                     </div>
-                    <p class="line-through text-gray-500 text-sm">R${{ product.price | number:'1.2-2' }}</p>
-                </div>
-                <div class="px-6 pt-4 pb-2" *ngIf="!product.discount">
-                    <div class="flex items-center gap-4">
-                        <p class="text-gray-800 font-bold text-xl">R${{ product.price | number:'1.2-2' }}</p>
+
+                    <div class="px-6 pt-4 pb-2" *ngIf="product.discount">
+                        <div class="flex items-center gap-4">
+                            <p class="text-gray-800 font-bold text-xl">R${{ (product.price - product.discount) |
+                                number:'1.2-2' }}</p>
+                            <p class="text-gray-500 text-sm uppercase">-R${{ product.discount | number:'1.2-2' }}
+                            </p>
+                        </div>
+                        <p class="line-through text-gray-500 text-sm">R${{ product.price | number:'1.2-2' }}</p>
+                    </div>
+                    <div class="px-6 pt-4 pb-2" *ngIf="!product.discount">
+                        <div class="flex items-center gap-4">
+                            <p class="text-gray-800 font-bold text-xl">R${{ product.price | number:'1.2-2' }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </ng-template>
-    </swiper>
+            </ng-template>
+        </swiper>
+    </div>
+</div>
+
+<div *ngIf="minimized">
+    <h2 *ngIf="categoryWithProduct.category" class="text-lg font-bold m-2 mb-0">{{ categoryWithProduct.category.name }}
+    </h2>
+    <div class="w-full mx-1 -mt-4" #swiperContainer>
+        <swiper *ngIf="categoryWithProduct.products && categoryWithProduct.products.length" [slidesPerView]="10"
+            [initialSlide]="0" [config]="{ width: widthSwiper }">
+            <ng-template *ngFor="let product of categoryWithProduct.products" swiperSlide class="w-fit">
+                <div [routerLink]="['/product-information']" [queryParams]="{ id: product.id }"
+                    class="w-32 h-fit mx-5 rounded-xl border overflow-hidden bg-white shadow-md shadow-slate-400 my-5">
+                    <img class="w-full h-24 rounded-t-lg object-cover object-center" [src]="product.imageUrl"
+                        alt="Imagem do produto">
+
+                    <div class="px-4 py-2">
+                        <p class="font-bold text-md w-full truncate">{{ product.name }}</p>
+                        <p class="text-gray-800 text-sm">R${{ (product.price - product.discount) | number:'1.2-2' }}</p>
+                    </div>
+                </div>
+            </ng-template>
+        </swiper>
+    </div>
 </div>

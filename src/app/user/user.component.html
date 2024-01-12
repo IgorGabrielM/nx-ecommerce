@@ -1,0 +1,37 @@
+<nx-ecommerce-header></nx-ecommerce-header>
+<div *ngIf="user && userImageUrl" class="m-2 flex-col gap-2">
+    <img *ngIf="userImageUrl" alt="Imagem do usuário" [src]="userImageUrl" class="w-full h-52 rounded-xl object-cover"
+        routerLink="../user" />
+    <div class="flex justify-between border-b-2 pb-2">
+        <div>
+            <h2 class="text-xl font-bold mt-2">{{ user.username }}</h2>
+            <p *ngIf="user.id_position !== 1">
+                Cargo:
+                <span
+                    [class]="user.id_position === 2 ? 'text-green-400 font-bold ml-1' : 'text-indigo-800 font-bold ml-1'">
+                    {{ user.id_position === 2 ? "Vendedor" : "Adiministrador" }}
+                </span>
+            </p>
+        </div>
+        <div class="w-fit h-fit px-2 p-1 my-auto rounded-full bg-indigo-700">
+            <i class="ph-fill ph-pencil-simple text-2xl text-white"></i>
+        </div>
+    </div>
+    <div>
+        <h2 class="text-xl font-bold mt-2">Compras</h2>
+        <div class="m-1 p-1 flex flex-wrap gap-2" *ngFor="let purchase of purchases">
+            <div *ngFor="let product of purchase.products" routerLink="../purchase-information"
+                [queryParams]="{ purchaseId: purchase.id, productId: product.id}"
+                class="w-full h-fit p-2 border rounded-lg flex items-center justify-between">
+                <img [src]="product.imageUrl" [alt]="'Imagem do produto: ' + product.name"
+                    class="w-32 h-32 object-cover">
+                <div>
+                    <h3 class="font-bold text-lg">{{ product.name }}</h3>
+                    <p>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
+                    <!--Status da entrega-->
+                </div>
+                <i class="ph-fill ph-caret-right"></i>
+            </div>
+        </div>
+    </div>
+</div>

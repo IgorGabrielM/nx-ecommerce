@@ -37,6 +37,7 @@ import { SwiperModule } from 'swiper/angular';
 export class ProductCarouselComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer: ElementRef;
 
+  @Input() minimized: boolean = false;
   @Input() categoryWithProduct: { category: CategoryModel, products: ProductModel[] }
 
   widthSwiper: number
@@ -62,6 +63,8 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
       this.widthSwiper = this.widthSwiper / 2
     } else if (this.widthSwiper > 650) {
       this.widthSwiper = this.widthSwiper / 4
+    } else if (this.widthSwiper < 400 && this.minimized) {
+      this.widthSwiper = this.widthSwiper / 2.5
     }
     this.cdr.detectChanges();
   }

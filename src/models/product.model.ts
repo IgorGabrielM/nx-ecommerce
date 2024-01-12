@@ -1,5 +1,6 @@
 import { CommentModel } from "./comment.model";
 import { DefaultModel } from "./default.model";
+import { DeliveryStatusModel } from "./purchase.model";
 
 export class ProductModel extends DefaultModel {
     name: string
@@ -10,4 +11,5 @@ export class ProductModel extends DefaultModel {
     price: number
     discount?: number
     comments?: CommentModel[]
+    delivery_statuses?: DeliveryStatusModel[]
 }

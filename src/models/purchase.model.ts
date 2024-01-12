@@ -6,14 +6,11 @@ export class PurchaseModel extends DefaultModel {
     user_detail_id?: number;
     shopping_cart_id?: number;
     product_id?: number;
-    products?: ProductModel[]
+    products?: ProductModel[];
+    canceled?: boolean;
 }
 
-export class HistoricPurchaseModel extends DefaultModel {
-    user_id?: string;
-    user_detail_id?: number;
-    shopping_cart_id?: number;
-    product_id?: number;
-    products?: ProductModel[];
-    purchase_id: number;
+export class DeliveryStatusModel extends DefaultModel {
+    name: string;
+    changed_at?: Date;
 }
