@@ -16,42 +16,29 @@
             </p>
         </div>
     </div>
+    <div class="w-full flex justify-center">
+        <button brnSheetClose hlm hlmBtn variant='destructive' class="w-11/12 my-2" (click)="deleteProduct()">
+            <span class="mr-2">Cancelar compra</span>
+            <i class="ph-bold ph-x-circle text-xl"></i>
+        </button>
+    </div>
     <div class="flex justify-center my-2">
-        <!--         <div *ngIf="product.delivery_statuses.id && product.delivery_statuses.id !== 4"> -->
-        <!--         <div class="w-4/5">
-            <ol class="flex items-center w-full">
-                <li *ngFor="let delivery_statuses of delivery_statuses_default; let i = index"
-                    [class]="(i + 1) < delivery_statuses_default.length ? 'flex items-center w-full text-blue-500 after:content-[\'] after:w-full after:h-1 after:border-b after:border-4 after:inline-block after:border-blue-800' : ''">
-
-                    <div
-                        class="flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 bg-blue-800 shrink-0">
-                        <i class="ph-fill ph-check-fat text-white"></i>
-                    </div>
-
-                    <div>
-                        <p>{{ delivery_statuses.name }}</p>
-                    </div>
-                </li>
-            </ol>
-        </div> -->
-
-
         <div class="w-4/5">
             <ol class="relative border-s border-gray-700 text-gray-400">
-                <li *ngFor="let delivery_statuses of delivery_statuses_default; let i = index" class="mb-10 ms-6">
-                    <span
-                        class="absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-gray-900 bg-green-900">
+                <li *ngFor="let delivery_statuses of delivery_statuses_default; let i = index" class="mb-8 ms-6">
+                    <span [class]="getClassByRingDeliveryStatus(i)">
                         <i [class]="'ph-fill ' + delivery_statuses.icon "></i>
                     </span>
-                    <h3 class="font-medium leading-tight">{{ delivery_statuses.name }}</h3>
-                    <p class="text-sm">Data changed</p>
+                    <h3
+                        [class]="delivery_statuses_product && i < delivery_statuses_product.length ? 'font-medium leading-tight text-black' : 'font-medium leading-tight'">
+                        {{ delivery_statuses.name }}</h3>
+                    <span
+                        *ngIf="delivery_statuses_product && delivery_statuses_product.length && i < delivery_statuses_product.length"
+                        class="text-sm text-black">{{ delivery_statuses_product[i].changed_at | date:'dd/MM/yyyy'
+                        }}</span>
                 </li>
             </ol>
         </div>
-
-
-
-        <!--Histórico da entrega-->
     </div>
     <div *ngIf="productsRecommended && productsRecommended.length">
         <nx-ecommerce-product-carousel [categoryWithProduct]="{category: category, products:productsRecommended}"

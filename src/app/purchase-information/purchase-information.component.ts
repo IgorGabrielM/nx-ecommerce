@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ImageService } from 'src/services/image.service';
 import { ProductService } from 'src/services/product.service';
 import { ProductModel } from 'src/models/product.model';
@@ -10,11 +10,18 @@ import { CategoryModel } from 'src/models/category.model';
 import { CategoryService } from 'src/services/category.service';
 import { PurchaseService } from 'src/services/purchase.service';
 import { DeliveryStatusModel, PurchaseModel } from 'src/models/purchase.model';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Component({
   selector: 'nx-ecommerce-purchase-information',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent, ProductCarouselComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    HeaderComponent,
+    ProductCarouselComponent,
+    HlmButtonDirective,
+  ],
   templateUrl: './purchase-information.component.html',
   styleUrl: './purchase-information.component.scss',
 })
@@ -26,7 +33,9 @@ export class PurchaseInformationComponent {
   product: ProductModel
   purchase: PurchaseModel
   productsRecommended: ProductModel[] = []
-  delivery_statuses_default: { id: string, name: string, icon?: string }[] = [
+
+  delivery_statuses_product: DeliveryStatusModel[] = []
+  delivery_statuses_default: { id: string, name: string, icon?: string, changed_at?: Date }[] = [
     {
       id: '1',
       name: 'Pedido feito',
@@ -55,6 +64,7 @@ export class PurchaseInformationComponent {
     private categoryService: CategoryService,
     private imageService: ImageService,
 
+    private router: Router,
     private activatedRoute: ActivatedRoute,
   ) { }
 
@@ -62,6 +72,7 @@ export class PurchaseInformationComponent {
     this.getQuerryParam();
     this.loadProduct();
     this.loadPurchase();
+    this.changeDeliveryStatus();
   }
 
   getQuerryParam() {
@@ -81,10 +92,17 @@ export class PurchaseInformationComponent {
 
   loadPurchase() {
     this.purchaseService.find(this.purchaseId.toString()).then(({ data: purchase }) => {
+      const delivery_statuses_by_purchase = purchase[0].products.find((product) => product.id.toString() === this.productId.toString()).delivery_statuses
+      this.delivery_statuses_product = delivery_statuses_by_purchase ? delivery_statuses_by_purchase : undefined
       this.purchase = purchase[0]
-      this.product = { ...this.product, delivery_statuses: purchase[0].products.find((purchase) => String(purchase.id) === String(this.productId)).delivery_statuses }
-      console.log(this.product)
     })
+  }
+
+  getClassByRingDeliveryStatus(index: number): string {
+    if (this.delivery_statuses_product && index < this.delivery_statuses_product.length) {
+      return 'absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-green-500 bg-green-600 text-white'
+    }
+    return 'absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-gray-400 bg-white'
   }
 
   loadProductsRecommended() {
@@ -93,6 +111,29 @@ export class PurchaseInformationComponent {
         this.category = { ...category[0], name: 'Produtos relacionados' }
       })
       this.productsRecommended = productsRecommended;
+    })
+  }
+
+  changeDeliveryStatus() {
+    setTimeout(() => {
+      const lastDeliveryStatus = this.delivery_statuses_product[this.delivery_statuses_product.length - 1]
+      if (lastDeliveryStatus.id != '4') {
+        if (new Date(lastDeliveryStatus.changed_at).getDate() < new Date().getDate() - 2) {
+          const product = this.purchase.products.find((product) => product.id.toString() === this.productId.toString())
+          const statusToChangeIndex = this.delivery_statuses_product.indexOf(lastDeliveryStatus) + 1
+          const statusToChange: { id: string; name: string; icon: string, changed_at?: Date; } = { ...this.delivery_statuses_default[statusToChangeIndex], icon: undefined, changed_at: new Date() }
+          product.delivery_statuses.push(statusToChange)
+
+          console.log(product)
+          this.purchaseService.update({ ...this.purchase }).then()
+        }
+      }
+    }, 2000)
+  }
+
+  deleteProduct() {
+    this.purchaseService.delete(this.purchase.id).then(() => {
+      this.router.navigate(['/user'])
     })
   }
 

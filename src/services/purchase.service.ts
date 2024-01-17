@@ -25,6 +25,10 @@ export class PurchaseService {
         return await this.supabase.from('purchase').update(purchase).eq('id', purchase.id)
     }
 
+    async delete(purchaseId: string): Promise<PostgrestSingleResponse<PurchaseModel>> {
+        return await this.supabase.from('purchase').delete().eq('id', purchaseId)
+    }
+
     async create(purchase: PurchaseModel) {
         purchase = {
             ...purchase,
