@@ -1,7 +1,7 @@
 <nx-ecommerce-header />
 <div class="flex justify-center">
     <div class="w-10/12 h-fit">
-        <div>
+        <div class="hidden md:inline-flex">
             <swiper [slidesPerView]="1" [initialSlide]="0" [config]="{ width: 1555, height: 10 }" [pagination]="true">
                 <ng-template swiperSlide>
                     <img src="../../assets/banner-shop-1.jpg" alt="">
@@ -13,10 +13,12 @@
         </div>
 
         <div>
-            <h3 class="ml-5 mt-2 text-2xl font-bold">Ofertas do dia</h3>
-            <!--Listar as ofertas do dia-->
+            <div class="my-3">
+                <nx-ecommerce-search-bar class="md:hidden"></nx-ecommerce-search-bar>
+            </div>
 
-            <div class="flex flex-col gap-5">
+
+            <div class="flex flex-col">
                 <nx-ecommerce-product-carousel *ngFor="let categoryWithProduct of sortedCategories()"
                     [categoryWithProduct]="categoryWithProduct"></nx-ecommerce-product-carousel>
             </div>

@@ -21,6 +21,7 @@ import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { ShoppingCartModel } from 'src/models/shoppingCart.model';
 import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 import { CategoryModel } from 'src/models/category.model';
+import { SearchBarComponent } from '../components/search-bar/search-bar.component';
 
 @Component({
   selector: 'nx-ecommerce-home',
@@ -34,7 +35,8 @@ import { CategoryModel } from 'src/models/category.model';
     HlmPopoverContentDirective,
     HlmPopoverCloseDirective,
     HlmInputDirective,
-    ProductCarouselComponent
+    ProductCarouselComponent,
+    SearchBarComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
