@@ -8,9 +8,9 @@
 <div *ngIf="searchStr && searchStr.length > 0"
     class="w-3/4 ml-3 md:w-1/2 h-fit md:-ml-48 mt-1 bg-slate-200 absolute z-10 rounded-lg shadow-xl shadow-black">
     <div class="flex flex-wrap justify-center gap-2 m-2">
-        <div *ngFor="let product of products"
+        <div *ngFor="let product of products.slice(0, 10)"
             class="max-w-md p-2 border border-gray-200 shadow-md shadow-gray-400 bg-white rounded-lg flex flex-col items-center">
-            <img class="w-20 h-fit rounded-lg object-cover" [src]="product.imageUrl" alt="Imagem do produto">
+            <img class="w-20 h-fit rounded-lg object-cover" [src]="product.imagesUrl[0]" alt="Imagem do produto">
             <p>{{ product.name }}</p>
             <span>R${{ (product.price - product.discount) | number:'1.2-2' }}</span>
         </div>

@@ -1,10 +1,13 @@
 import { DefaultModel } from "./default.model";
+import { UserDetailModel } from "./user.model";
 
 export class CommentModel extends DefaultModel {
-    comment: string;
-    stars: number;
-    user_detail_id?: number;
-
+    id_user_detail: number
+    userDetail: UserDetailModel
+    id_product: string
     user_image_url?: string;
-    stars_array: null[]
+    comment_message: string
+    stars: number
+    stars_array?: any[]
+    isOpen?: boolean
 }

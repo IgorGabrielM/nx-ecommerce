@@ -40,8 +40,8 @@ export class UserComponent implements OnInit {
 
   loadPurchases() {
     this.purchaseService.listByUser(JSON.parse(localStorage.getItem('userData')).userDetailId).then(({ data: purchases }) => {
-      purchases.forEach((purchase) => {
-        purchase.products = this.imageService.loadImageForProducts(purchase.products)
+      purchases.forEach(async (purchase) => {
+        purchase.products = await this.imageService.loadImageForProducts(purchase.products)
       })
       this.purchases = purchases
     })

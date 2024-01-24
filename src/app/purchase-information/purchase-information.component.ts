@@ -11,6 +11,9 @@ import { CategoryService } from 'src/services/category.service';
 import { PurchaseService } from 'src/services/purchase.service';
 import { DeliveryStatusModel, PurchaseModel } from 'src/models/purchase.model';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { CommentModel } from 'src/models/comment.model';
+import { CommentService } from 'src/services/comment.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'nx-ecommerce-purchase-information',
@@ -21,6 +24,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
     HeaderComponent,
     ProductCarouselComponent,
     HlmButtonDirective,
+    FormsModule
   ],
   templateUrl: './purchase-information.component.html',
   styleUrl: './purchase-information.component.scss',
@@ -58,11 +62,15 @@ export class PurchaseInformationComponent {
     },
   ]
 
+  isCreateComment = false
+  commentModel: CommentModel
+
   constructor(
     private productService: ProductService,
     private purchaseService: PurchaseService,
     private categoryService: CategoryService,
     private imageService: ImageService,
+    private commentService: CommentService,
 
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -73,6 +81,8 @@ export class PurchaseInformationComponent {
     this.loadProduct();
     this.loadPurchase();
     this.changeDeliveryStatus();
+
+    this.commentModel = new CommentModel()
   }
 
   getQuerryParam() {
@@ -83,9 +93,10 @@ export class PurchaseInformationComponent {
   }
 
   loadProduct() {
-    this.productService.find(this.productId.toString()).then(({ data: product }) => {
-      this.product = product[0]
-      this.product.imageUrl = this.imageService.getByPath(product[0].image).data.publicUrl
+    this.productService.find(this.productId.toString()).then(async ({ data: product }) => {
+      this.product = (await this.imageService.loadImageForProducts(product))[0]
+
+      //this.product.imageUrl = this.imageService.getByPath(product[0].image).data.publicUrl
       this.loadProductsRecommended()
     })
   }
@@ -124,7 +135,6 @@ export class PurchaseInformationComponent {
           const statusToChange: { id: string; name: string; icon: string, changed_at?: Date; } = { ...this.delivery_statuses_default[statusToChangeIndex], icon: undefined, changed_at: new Date() }
           product.delivery_statuses.push(statusToChange)
 
-          console.log(product)
           this.purchaseService.update({ ...this.purchase }).then()
         }
       }
@@ -137,4 +147,21 @@ export class PurchaseInformationComponent {
     })
   }
 
+  selectStar(starsCount: number) {
+    this.commentModel.stars = starsCount
+  }
+
+  sendComment() {
+    const payload: CommentModel = {
+      ...this.commentModel,
+      id_product: this.product.id,
+      id_user_detail: JSON.parse(localStorage.getItem('userData')).userDetailId,
+      stars: this.commentModel.stars ? this.commentModel.stars : 0
+    }
+    this.commentService.create(payload).then(() => {
+      this.isCreateComment = false
+      this.commentModel.comment_message = undefined
+      this.commentModel.stars = 0
+    })
+  }
 }

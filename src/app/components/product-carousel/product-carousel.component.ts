@@ -69,8 +69,8 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
-  loadImagesProducts() {
-    this.categoryWithProduct.products = this.imageService.loadImageForProducts(this.categoryWithProduct.products)
+  async loadImagesProducts() {
+    this.categoryWithProduct.products = await this.imageService.loadImageForProducts(this.categoryWithProduct.products)
   }
 
   insertOnShoppingCart(product: ProductModel) {

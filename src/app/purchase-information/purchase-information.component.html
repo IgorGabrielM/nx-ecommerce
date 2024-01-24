@@ -7,7 +7,7 @@
 
 <div *ngIf="product">
     <div class="pb-2 flex justify-between items-center mx-2 border-b">
-        <img class="w-52 h-32 object-cover" [src]="product.imageUrl" [alt]="'Imagem do produto' + product.name">
+        <img class="w-52 h-32 object-cover" [src]="product.imagesUrl[0]" [alt]="'Imagem do produto' + product.name">
         <div>
             <p class="text-lg">{{ product.name }}</p>
             <p [routerLink]="['/product-information']" [queryParams]="{ id: product.id }"
@@ -40,6 +40,28 @@
             </ol>
         </div>
     </div>
+
+    <div class="w-full">
+        <div *ngIf="!isCreateComment" class="w-full flex justify-center">
+            <button hlmBtn (click)="isCreateComment = true" class="w-11/12">Escrever
+                comentário</button>
+        </div>
+        <div *ngIf="isCreateComment" class="flex flex-col justify-center items-center">
+            <input type="text" name="comment" hlmInput [(ngModel)]="commentModel.comment_message"
+                placeholder="Escreva seu comentário" class="w-11/12 h-10 border-gray-500">
+            <div class="w-11/12 flex justify-between items-center mt-2">
+                <div>
+                    <div class="w-24 flex justify-between text-gray-400 text-3xl">
+                        <i *ngFor="let star of [null, null, null, null, null]; let i = index" (click)="selectStar(i)"
+                            [class]="'ph-fill ph-star ' + (commentModel.stars && i <= commentModel.stars ? 'text-yellow-400' : '')"></i>
+                    </div>
+                    <span class="text-[10px] text-gray-500">Clique na estrela</span>
+                </div>
+                <button hlmBtn (click)="sendComment()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
     <div *ngIf="productsRecommended && productsRecommended.length">
         <nx-ecommerce-product-carousel [categoryWithProduct]="{category: category, products:productsRecommended}"
             [minimized]="true"></nx-ecommerce-product-carousel>

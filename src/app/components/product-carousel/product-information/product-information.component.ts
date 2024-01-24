@@ -9,6 +9,12 @@ import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
 import { PurchaseService } from 'src/services/purchase.service';
 import { UserDetailService } from 'src/services/user.service';
+import { SwiperModule } from 'swiper/angular';
+import { CommentService } from 'src/services/comment.service';
+import { CommentModel } from 'src/models/comment.model';
+import { FormsModule } from '@angular/forms';
+import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 
 @Component({
   selector: 'nx-ecommerce-product-information',
@@ -16,17 +22,18 @@ import { UserDetailService } from 'src/services/user.service';
   imports: [
     CommonModule,
     HeaderComponent,
-    RouterModule
+    RouterModule,
+    FormsModule,
+    SwiperModule,
+    HlmInputDirective,
+    HlmButtonDirective
   ],
   templateUrl: './product-information.component.html',
   styleUrl: './product-information.component.scss',
 })
 export class ProductInformationComponent implements OnInit {
   product: ProductModel
-
-  zoom = 1;
-  offsetX = 0;
-  offsetY = 0;
+  comments: CommentModel[] = []
 
   constructor(
     private productService: ProductService,
@@ -34,6 +41,7 @@ export class ProductInformationComponent implements OnInit {
     private shoppingCartService: ShoppingCartService,
     private purchaseService: PurchaseService,
     private userDetailService: UserDetailService,
+    private commentService: CommentService,
 
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
@@ -43,12 +51,13 @@ export class ProductInformationComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadQueryParamId();
+    setTimeout(() => this.loadComments(), 1000)
   }
 
   loadQueryParamId() {
     const productId = this.activatedRoute.snapshot.queryParams['id']
-    this.productService.find(productId).then(({ data: products }) => {
-      this.product = { ...products[0], imageUrl: this.imageService.getByPath(products[0].image).data.publicUrl }
+    this.productService.find(productId).then(async ({ data: products }) => {
+      this.product = (await this.imageService.loadImageForProducts(products))[0]
     })
   }
 
@@ -56,12 +65,29 @@ export class ProductInformationComponent implements OnInit {
     this.product.comments.map((comment) => {
       return {
         ...comment,
-        user_image_url: this.userDetailService.find(comment.user_detail_id).then(({ data: usr }) => {
+        user_image_url: this.userDetailService.find(comment.id_user_detail).then(({ data: usr }) => {
           return this.imageService.getByPath(usr[0].image)
         }),
         stars_array: [null, null, null, null, null]
       }
     })
+  }
+
+  loadComments() {
+    this.commentService.listByProduct(this.product.id).then(async ({ data: comments }) => {
+      const commentsWithImage: CommentModel[] = await Promise.all(comments.map(async (comment) => {
+        const userDetail = await this.userDetailService.find(comment.id_user_detail);
+        const usr = userDetail.data;
+        const userImageUrl = await this.imageService.getByPath(usr[0].image).data.publicUrl;
+        return {
+          ...comment,
+          stars_array: new Array(comment.stars),
+          user_image_url: userImageUrl,
+        };
+      }));
+
+      this.comments = commentsWithImage;
+    });
   }
 
   insertOnShoppingCart() {
@@ -74,28 +100,5 @@ export class ProductInformationComponent implements OnInit {
     this.purchaseService.create({ product_id: Number(this.product.id), products: [this.product] }).then(() => {
       this.router.navigate(['/home'])
     })
-  }
-
-  //Zoom image
-  onMouseMove(event: MouseEvent) {
-    const { offsetX, offsetY, target } = event;
-    const { offsetWidth, offsetHeight } = target as HTMLElement;
-
-    const xPercent = offsetX / offsetWidth;
-    const yPercent = offsetY / offsetHeight;
-
-    this.offsetX = xPercent;
-    this.offsetY = yPercent;
-    this.zoom = 2
-  }
-
-  onMouseLeave() {
-    this.zoom = 1;
-    this.offsetX = 0;
-    this.offsetY = 0;
-  }
-
-  getTransformStyle() {
-    return `scale(${this.zoom}) translate(-${this.offsetX * 20}%, -${this.offsetY * 20}%)`;
   }
 }

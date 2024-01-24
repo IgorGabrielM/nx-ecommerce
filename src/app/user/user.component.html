@@ -23,7 +23,7 @@
             <div *ngFor="let product of purchase.products" routerLink="../purchase-information"
                 [queryParams]="{ purchaseId: purchase.id, productId: product.id}"
                 class="w-full h-fit p-2 border rounded-lg flex items-center justify-between">
-                <img [src]="product.imageUrl" [alt]="'Imagem do produto: ' + product.name"
+                <img [src]="product.imagesUrl[0]" [alt]="'Imagem do produto: ' + product.name"
                     class="w-32 h-32 object-cover">
                 <div>
                     <h3 class="font-bold text-lg">{{ product.name }}</h3>
@@ -32,6 +32,9 @@
                 </div>
                 <i class="ph-fill ph-caret-right"></i>
             </div>
+        </div>
+        <div *ngIf="!purchases || !purchases.length" class="mx-3">
+            <p>Você ainda não possui compras realizadas...</p>
         </div>
     </div>
 </div>

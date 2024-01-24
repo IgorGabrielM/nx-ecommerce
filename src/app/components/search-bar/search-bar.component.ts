@@ -23,8 +23,8 @@ export class SearchBarComponent {
   searchStr: string
 
   onInput(event: any): void {
-    this.productService.search(this.searchStr).then(({ data: products }) => {
-      this.products = this.imageService.loadImageForProducts(products)
+    this.productService.search(this.searchStr).then(async ({ data: products }) => {
+      this.products = await this.imageService.loadImageForProducts(products)
     })
   }
 

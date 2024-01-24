@@ -12,6 +12,8 @@ import { HlmCommandImports } from '@spartan-ng/ui-command-helm';
 import { CategoryService } from 'src/services/category.service';
 import { CategoryModel } from 'src/models/category.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SwiperModule } from 'swiper/angular';
+import { ProductModel } from 'src/models/product.model';
 
 
 type Framework = { label: string; value: string };
@@ -30,6 +32,7 @@ type Framework = { label: string; value: string };
     HlmPopoverContentDirective,
     BrnPopoverContentDirective,
     NgForOf,
+    SwiperModule
   ],
   templateUrl: './create-product.component.html',
   styleUrl: './create-product.component.scss',
@@ -40,11 +43,12 @@ export class CreateProductComponent implements OnInit {
   fileUrl: {
     urlObj: string
     path?: string
-  }
+  }[] = []
 
   categories: CategoryModel[] = []
   currentCategory: CategoryModel | undefined
   productId: string
+  product: ProductModel
 
   public state = signal<'closed' | 'open'>('closed');
 
@@ -77,17 +81,21 @@ export class CreateProductComponent implements OnInit {
       if (this.productId) {
         this.productService.find(this.productId).then(async ({ data: product }) => {
           if (product) {
+            this.product = product[0]
             this.formData = this.fb.group({
               name: [product[0].name, Validators.required],
               description: [product[0].description, Validators.required],
-              image: [product[0].image, Validators.required],
+              images: [product[0].images, Validators.required],
               price: [product[0].price, Validators.required],
               discount: [product[0].discount],
             });
-            this.fileUrl = {
-              urlObj: this.imageService.getByPath(product[0].image).data.publicUrl,
-              path: product[0].image
-            };
+
+            this.fileUrl = product[0].images.map((file) => {
+              return {
+                urlObj: this.imageService.getByPath(file).data.publicUrl,
+                path: file
+              };
+            });
             this.currentCategory = (await this.categoryService.find(product[0].id_category.toString())).data[0]
           }
         })
@@ -117,15 +125,21 @@ export class CreateProductComponent implements OnInit {
   onFileChange(event: any) {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
-      this.fileUrl = { path: '', urlObj: '' }
 
-      this.formData.value.image = fileList[0];
-      this.imageService.uploadImage(this.formData.value.image).then(({ data: img }) => {
-        this.fileUrl.urlObj = URL.createObjectURL(this.formData.value.image)
-        this.fileUrl.path = img.path
-        this.formData.value.image = img.path
+      this.formData.value.images = fileList[0];
+      this.imageService.uploadImage(this.formData.value.images).then(({ data: img }) => {
+        this.fileUrl.push({
+          urlObj: URL.createObjectURL(this.formData.value.images),
+          path: img.path
+        })
+        this.formData.value.images = img.path
       })
     }
+  }
+
+  removeImage(file: { urlObj: string, path?: string }) {
+    this.fileUrl = this.fileUrl.filter((f) => f !== file)
+    this.productService.update({ ...this.product, images: this.fileUrl.map((file) => file.path) })
   }
 
   delete() {
@@ -136,11 +150,11 @@ export class CreateProductComponent implements OnInit {
 
   onSubmit() {
     if (!this.productId) {
-      this.productService.create({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id }).then(() => {
+      this.productService.create({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id }).then(() => {
         this.router.navigate(['/home'])
       })
     } else {
-      this.productService.update({ ...this.formData.value, image: this.fileUrl.path, id_category: this.currentCategory.id, id: this.productId }).then(() => {
+      this.productService.update({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id, id: this.productId }).then(() => {
         this.router.navigate(['/home'])
       })
     }

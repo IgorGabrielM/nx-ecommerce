@@ -117,8 +117,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loadingShoppingCart() {
     if (localStorage.getItem('userData')) {
       const shoppingCartId = JSON.parse(localStorage.getItem('userData')).shoppingCartId
-      this.shoppingCartService.find(shoppingCartId).then(({ data: shoppingCart }) => {
-        shoppingCart[0].products = this.imageService.loadImageForProducts(shoppingCart[0].products)
+      this.shoppingCartService.find(shoppingCartId).then(async ({ data: shoppingCart }) => {
+        shoppingCart[0].products = await this.imageService.loadImageForProducts(shoppingCart[0].products)
         this.shoppingCart = shoppingCart[0]
       })
     }

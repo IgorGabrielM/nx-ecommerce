@@ -25,10 +25,15 @@ export class ImageService {
         return await this.supabase.storage.from('ecommerce').upload(`users/user_${Date.now()}.png`, image)
     }
 
-    loadImageForProducts(products: ProductModel[]): ProductModel[] {
-        products.forEach(async (product) => {
-            product.imageUrl = (await this.getByPath(product.image)).data.publicUrl
-        })
-        return products
+    async loadImageForProducts(products: ProductModel[]): Promise<ProductModel[]> {
+        await Promise.all(products.map(async (product) => {
+            product.imagesUrl = []
+            await Promise.all(product.images.map(async (image) => {
+                const imageUrl = (await this.getByPath(image)).data.publicUrl;
+                product.imagesUrl.push(imageUrl);
+            }));
+        }));
+
+        return products;
     }
 }

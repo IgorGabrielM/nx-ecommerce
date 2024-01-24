@@ -7,7 +7,7 @@
 
         <div class="flex flex-col gap-4 my-4 overflow-y-auto h-5/6 p-4">
             <section hlmCard *ngFor="let product of shoppingCart.products; let i = index" class="relative">
-                <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imageUrl +')'">
+                <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imagesUrl[0] +')'">
                 </div>
                 <div class="flex justify-between items-center">
                     <div hlmCardHeader>
@@ -104,14 +104,6 @@
             </hlm-sheet-header>
 
             <nav class="flex flex-col gap-2 items-center py-3">
-                <!--                 <div
-                    class="w-full h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
-                    <input type="search" id="default-search"
-                        class="block w-full h-full ps-10 text-sm text-gray-900 rounded-full bg-transparent"
-                        placeholder="Procurar" required>
-                    <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
-                </div> -->
-
                 <a routerLink="../create-product" *ngIf="positionId >= 2" class="w-full">
                     <button hlmBtn class="w-full flex justify-center items-center gap-3">
                         <i class="ph-bold ph-plus-circle text-xl"></i>
@@ -123,7 +115,8 @@
                 <div *ngIf="shoppingCart.products.length"
                     class="w-full flex flex-col gap-4 my-2 overflow-y-auto p-4 border-t-2 border-indigo-400">
                     <section hlmCard *ngFor="let product of shoppingCart.products; let i = index" class="relative">
-                        <div class="bg-cover bg-center h-40" [style]="'background-image: url('+ product.imageUrl +')'">
+                        <div class="bg-cover bg-center h-40"
+                            [style]="'background-image: url('+ product.imagesUrl[0] +')'">
                         </div>
                         <div class="flex justify-between items-center">
                             <div hlmCardHeader>
