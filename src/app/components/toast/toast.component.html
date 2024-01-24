@@ -1,0 +1,6 @@
+<div [class]="'w-11/12 text-center p-2 rounded-lg toast-container absolute top-1 left-[5vw] z-50 shadow-md shadow-gray-500 ' + (type === 'success' ? 'bg-green-400' : 'bg-red-700 text-white')"
+    *ngIf="message">
+    <div class="toast">
+        {{ message }}
+    </div>
+</div>

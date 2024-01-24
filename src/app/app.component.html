@@ -1,1 +1,3 @@
 <router-outlet></router-outlet>
+<nx-ecommerce-toast *ngFor="let toast of toastService.toasts$ | async" [message]="toast.message"
+    [type]="toast.type"></nx-ecommerce-toast>

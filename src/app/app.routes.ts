@@ -39,5 +39,10 @@ export const appRoutes: Route[] = [
         path: 'purchase-information',
         canActivate: [AuthGuard],
         loadComponent: () => import('../app/purchase-information/purchase-information.component').then((c => c.PurchaseInformationComponent))
+    },
+    {
+        path: 'purchase-details',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('../app/purchase-details/purchase-details.component').then((c => c.PurchaseDetailsComponent))
     }
 ];

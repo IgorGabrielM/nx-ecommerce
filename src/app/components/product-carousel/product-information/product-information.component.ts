@@ -15,6 +15,7 @@ import { CommentModel } from 'src/models/comment.model';
 import { FormsModule } from '@angular/forms';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
+import { ToastService } from 'src/services/subjects/toast.service';
 
 @Component({
   selector: 'nx-ecommerce-product-information',
@@ -42,6 +43,7 @@ export class ProductInformationComponent implements OnInit {
     private purchaseService: PurchaseService,
     private userDetailService: UserDetailService,
     private commentService: CommentService,
+    public toastService: ToastService,
 
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
@@ -93,12 +95,14 @@ export class ProductInformationComponent implements OnInit {
   insertOnShoppingCart() {
     this.shoppingCartService.insertProduct(this.product).then(() => {
       this.eventRealodShopingCartService.sendEvent(true)
+      this.toastService.show('Produto adicionado ao carrinho!');
     })
   }
 
   purchaseProduct() {
     this.purchaseService.create({ product_id: Number(this.product.id), products: [this.product] }).then(() => {
       this.router.navigate(['/home'])
+      this.toastService.show('Compra realizada com sucesso!');
     })
   }
 }

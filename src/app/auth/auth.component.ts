@@ -5,13 +5,15 @@ import { Router, RouterModule } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastService } from 'src/services/subjects/toast.service';
+import { ToastComponent } from '../components/toast/toast.component';
 
 
 @Component({
   selector: 'nx-ecommerce-auth',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule,
-    HlmButtonDirective, HlmInputDirective],
+    HlmButtonDirective, HlmInputDirective, ToastComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
 })
@@ -22,6 +24,7 @@ export class AuthComponent {
 
   constructor(
     private authService: AuthService,
+    public toastService: ToastService,
 
     private readonly fb: FormBuilder,
     private router: Router
@@ -34,15 +37,17 @@ export class AuthComponent {
 
   async onSubmit(): Promise<void> {
     try {
-      this.loading = true
-      this.authService.signInWithEmail(this.signInForm.value).then((res: any) => {
-        this.loading = false
-        localStorage.setItem('token', res.data.session.access_token)
-        this.router.navigate(['/home'])
-        //toast -> this.snackBar.open('Autenticado com sucesso', 'Fechar', { duration: 2000 });
-      }, () => this.loading = false)
+      this.loading = true;
+      const res = await this.authService.signInWithEmail(this.signInForm.value);
+      this.loading = false;
+      localStorage.setItem('token', res.data.session.access_token);
+      this.router.navigate(['/home']);
+      this.toastService.show('Login executado com sucesso!');
+    } catch (error) {
+      this.toastService.show('Credenciais inválidas', 'danger');
+      this.loading = false;
     } finally {
-      this.signInForm.reset()
+      this.signInForm.reset();
     }
   }
 }

@@ -14,6 +14,7 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { CommentModel } from 'src/models/comment.model';
 import { CommentService } from 'src/services/comment.service';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from 'src/services/subjects/toast.service';
 
 @Component({
   selector: 'nx-ecommerce-purchase-information',
@@ -71,6 +72,7 @@ export class PurchaseInformationComponent {
     private categoryService: CategoryService,
     private imageService: ImageService,
     private commentService: CommentService,
+    public toastService: ToastService,
 
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -95,8 +97,6 @@ export class PurchaseInformationComponent {
   loadProduct() {
     this.productService.find(this.productId.toString()).then(async ({ data: product }) => {
       this.product = (await this.imageService.loadImageForProducts(product))[0]
-
-      //this.product.imageUrl = this.imageService.getByPath(product[0].image).data.publicUrl
       this.loadProductsRecommended()
     })
   }
@@ -132,9 +132,11 @@ export class PurchaseInformationComponent {
         if (new Date(lastDeliveryStatus.changed_at).getDate() < new Date().getDate() - 2) {
           const product = this.purchase.products.find((product) => product.id.toString() === this.productId.toString())
           const statusToChangeIndex = this.delivery_statuses_product.indexOf(lastDeliveryStatus) + 1
-          const statusToChange: { id: string; name: string; icon: string, changed_at?: Date; } = { ...this.delivery_statuses_default[statusToChangeIndex], icon: undefined, changed_at: new Date() }
+          const statusToChange: { id: string; name: string; icon: string, changed_at?: Date; } = {
+            ...this.delivery_statuses_default[statusToChangeIndex],
+            icon: undefined, changed_at: new Date()
+          }
           product.delivery_statuses.push(statusToChange)
-
           this.purchaseService.update({ ...this.purchase }).then()
         }
       }
@@ -144,6 +146,7 @@ export class PurchaseInformationComponent {
   deleteProduct() {
     this.purchaseService.delete(this.purchase.id).then(() => {
       this.router.navigate(['/user'])
+      this.toastService.show('Compra cancelada!');
     })
   }
 
@@ -159,6 +162,7 @@ export class PurchaseInformationComponent {
       stars: this.commentModel.stars ? this.commentModel.stars : 0
     }
     this.commentService.create(payload).then(() => {
+      this.toastService.show('Comentário enviado!');
       this.isCreateComment = false
       this.commentModel.comment_message = undefined
       this.commentModel.stars = 0

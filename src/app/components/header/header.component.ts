@@ -38,6 +38,7 @@ import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-s
 import { UserDetailService } from 'src/services/user.service';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component'
 import { PurchaseService } from 'src/services/purchase.service';
+import { ToastService } from 'src/services/subjects/toast.service';
 
 @Component({
   selector: 'nx-ecommerce-header',
@@ -84,6 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private imageService: ImageService,
     private userDetailsService: UserDetailService,
     private purchaseService: PurchaseService,
+    public toastService: ToastService,
 
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
@@ -149,7 +151,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.purchaseService.create({ shopping_cart_id: Number(this.shoppingCart.id), products: this.shoppingCart.products })
     this.shoppingCart = { ...this.shoppingCart, products: [] }
     this.shoppingCartService.update(this.shoppingCart).then(() => {
-      //rota para pós compra
+      this.toastService.show('Compra execultada com sucesso!');
     })
   }
 

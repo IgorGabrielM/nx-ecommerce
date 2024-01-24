@@ -35,7 +35,6 @@ export class PurchaseService {
             user_id: JSON.parse(localStorage.getItem('sb-wdbzebrfirgiirdyqgku-auth-token')).user.identities[0].user_id,
             user_detail_id: JSON.parse(localStorage.getItem('userData')).userDetailId,
             products: purchase.products.map((product) => { return { ...product, delivery_statuses: [{ id: '1', name: 'Pedido feito', changed_at: new Date() }] } })
-            //delivery_statuses: [{ id: '1', name: 'Pedido feito', changed_at: new Date() }]
         };
         return await this.supabase.from('purchase').insert<PurchaseModel>(purchase).select();
     }

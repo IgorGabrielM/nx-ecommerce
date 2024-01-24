@@ -9,6 +9,7 @@ import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { UserDetailModel } from 'src/models/user.model';
 import { UserDetailService } from 'src/services/user.service';
 import { ImageService } from 'src/services/image.service';
+import { ToastService } from 'src/services/subjects/toast.service';
 
 @Component({
   selector: 'nx-ecommerce-sign-up',
@@ -33,6 +34,7 @@ export class SignUpComponent {
     private userDetailsService: UserDetailService,
     private shoppingCartService: ShoppingCartService,
     private imageService: ImageService,
+    public toastService: ToastService,
 
     private readonly fb: FormBuilder,
     private router: Router
@@ -69,12 +71,12 @@ export class SignUpComponent {
           if (shoppingCart && shoppingCart.data) {
             const payload: UserDetailModel = { id_user: userIdCreated, username: this.signUpForm.value.name, id_position: 1, id_shopping_cart: Number((shoppingCart.data[0] as any).id), image: this.fileUrl.path }
             this.userDetailsService.create(payload).then(() => {
+              this.toastService.show('Usuário criado com sucesso!');
               this.loading = false
               this.router.navigate(['/home'])
             })
           }
         })
-        /*toast-> this.snackBar.open('Conta criada com sucesso', 'Fechar', { duration: 2000 }); */
       }, (err) => {
         this.loading = false
         this.signUpForm.reset()

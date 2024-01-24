@@ -14,6 +14,7 @@ import { ProductModel } from 'src/models/product.model';
 import { ImageService } from 'src/services/image.service';
 import { ShoppingCartService } from 'src/services/shopping-cart.service';
 import { EventRealodShopingCartService } from 'src/services/subjects/ev-reload-shoping-cart.subject.service';
+import { ToastService } from 'src/services/subjects/toast.service';
 import { SwiperModule } from 'swiper/angular';
 
 @Component({
@@ -47,6 +48,7 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
     private imageService: ImageService,
     private shoppingCartService: ShoppingCartService,
     private eventRealodShopingCartService: EventRealodShopingCartService,
+    public toastService: ToastService,
 
     private cdr: ChangeDetectorRef,
     private router: Router
@@ -79,6 +81,7 @@ export class ProductCarouselComponent implements OnInit, AfterViewInit {
     }, 10)
     this.shoppingCartService.insertProduct(product).then(() => {
       this.eventRealodShopingCartService.sendEvent(true)
+      this.toastService.show('Produto adicionado ao carrinho!');
     })
   }
 

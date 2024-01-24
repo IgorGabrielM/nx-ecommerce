@@ -14,6 +14,7 @@ import { CategoryModel } from 'src/models/category.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwiperModule } from 'swiper/angular';
 import { ProductModel } from 'src/models/product.model';
+import { ToastService } from 'src/services/subjects/toast.service';
 
 
 type Framework = { label: string; value: string };
@@ -57,6 +58,7 @@ export class CreateProductComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private activatedRoute: ActivatedRoute,
+    public toastService: ToastService,
 
     private readonly fb: FormBuilder,
     private router: Router
@@ -145,6 +147,7 @@ export class CreateProductComponent implements OnInit {
   delete() {
     this.productService.delete(this.productId).then(() => {
       this.router.navigate(['/home'])
+      this.toastService.show('Produto deletado com sucesso!');
     })
   }
 
@@ -152,10 +155,12 @@ export class CreateProductComponent implements OnInit {
     if (!this.productId) {
       this.productService.create({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id }).then(() => {
         this.router.navigate(['/home'])
+        this.toastService.show('Produto criado com sucesso!');
       })
     } else {
       this.productService.update({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id, id: this.productId }).then(() => {
         this.router.navigate(['/home'])
+        this.toastService.show('Produto editado com sucesso!');
       })
     }
   }
