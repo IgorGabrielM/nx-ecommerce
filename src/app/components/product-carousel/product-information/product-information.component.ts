@@ -100,9 +100,8 @@ export class ProductInformationComponent implements OnInit {
   }
 
   purchaseProduct() {
-    this.purchaseService.create({ product_id: Number(this.product.id), products: [this.product] }).then(() => {
-      this.router.navigate(['/home'])
-      this.toastService.show('Compra realizada com sucesso!');
+    this.purchaseService.create({ product_id: Number(this.product.id), products: [this.product] }).then(({ data: purchase }) => {
+      this.router.navigate(['/purchase-details'], { queryParams: { id: purchase[0].id } })
     })
   }
 }

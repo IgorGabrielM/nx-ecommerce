@@ -8,6 +8,14 @@ export class PurchaseModel extends DefaultModel {
     product_id?: number;
     products?: ProductModel[];
     canceled?: boolean;
+
+    payment_type?: string
+    installments_value?: number
+    installments_quantity?: number
+    cep?: string
+    street?: string
+    neighbourhood?: string
+    number_house?: number
 }
 
 export class DeliveryStatusModel extends DefaultModel {

@@ -1,25 +1,62 @@
-<div class="bg-gray-100">
-    <brn-popover [state]="state()" (stateChanged)="stateChanged($event)" sideOffset="5" closeDelay="100">
-        <button class="w-[200px] justify-between" id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn>
-            {{ currentFramework() ? currentFramework().label : 'Select framework...' }}
-            <hlm-icon size="sm" name="radixCaretSort" />
-        </button>
-        <brn-cmd *brnPopoverContent="let ctx" hlmPopoverContent hlm class="p-0 w-[200px]">
-            <hlm-cmd-input-wrapper>
-                <hlm-icon name="radixMagnifyingGlass" />
-                <input placeholder="Search framework..." brnCmdInput hlm />
-            </hlm-cmd-input-wrapper>
-            <div *brnCmdEmpty hlmCmdEmpty>No results found.</div>
-            <brn-cmd-list hlm>
-                <brn-cmd-group hlm>
-                    <button *ngFor="let framework of frameworks" brnCmdItem [value]="framework.value"
-                        (selected)="commandSelected(framework)" hlm>
-                        <hlm-icon [class.opacity-0]="currentFramework()?.value !== framework.value" name="radixCheck"
-                            hlmCmdIcon />
-                        {{ framework.label }}
+<nx-ecommerce-header />
+
+<div class="flex flex-col items-center mt-2">
+    <div class="w-11/12 flex flex-col gap-2">
+        <div>
+            <label for="cep">CEP</label>
+            <input hlmInput type="text" name="cep" class="w-full" [(ngModel)]="delivery.cep" (input)="getAddress()">
+        </div>
+
+        <div>
+            <label for="cep">Rua</label>
+            <input hlmInput type="text" name="street" class="w-full" [(ngModel)]="delivery.street">
+        </div>
+
+        <div>
+            <label for="cep">Beirro</label>
+            <input hlmInput type="text" name="neighbourhood" class="w-full" [(ngModel)]="delivery.neighbourhood">
+        </div>
+
+        <div>
+            <label for="cep">Numero</label>
+            <input hlmInput type="text" name="numberHouse" class="w-full" [(ngModel)]="delivery.numberHouse">
+        </div>
+
+        <div class="relative">
+            <span>Forma de pagamento</span>
+            <div>
+                <brn-popover [state]="state()" (click)="stateChanged($event)" sideOffset="5" closeDelay="100">
+                    <button class="w-full justify-between" id="edit-profile" variant="outline" brnPopoverTrigger hlmBtn>
+                        {{ currentFormPaymont() ? currentFormPaymont().name : 'Selecione a forma de pagamento...' }}
+                        <hlm-icon size="sm" name="radixCaretSort" />
                     </button>
-                </brn-cmd-group>
-            </brn-cmd-list>
-        </brn-cmd>
-    </brn-popover>
+                    <brn-cmd *brnPopoverContent="let ctx" hlmPopoverContent hlm
+                        class="p-0 absolute -top-16 right-4 bg-white pt-9 shadow-md shadow-gray-500">
+                        <brn-cmd-group hlm class="-mt-8 flex flex-wrap gap-2 ">
+                            <button *ngFor="let formOfPayment of formOfPayments"
+                                class="px-4 border border-gray-300 rounded-lg" [value]="formOfPayment.id"
+                                (click)="commandSelected(formOfPayment)" hlm>
+                                {{ formOfPayment.name }}
+                            </button>
+                        </brn-cmd-group>
+                    </brn-cmd>
+                </brn-popover>
+            </div>
+        </div>
+
+        <div class="h-fit flex gap-2 items-end"
+            *ngIf="currentFormPaymont() && currentFormPaymont().id === 2 && formOfPaymentSelected">
+            <div>
+                <label for="installments">Numero de parcelas</label>
+                <input hlmInput type="number" max="10" min="1" name="installments" class="w-20"
+                    [(ngModel)]="formOfPaymentSelected.installments.installmentNumber">
+            </div>
+
+            <div class="py-2">
+                R${{ valueOfInstallment() }}
+            </div>
+        </div>
+
+        <button hlmBtn class="w-full mx-auto mt-4" [disabled]="!canFoward()" (click)="onSubmit()">Confirmar</button>
+    </div>
 </div>
