@@ -11,13 +11,13 @@
                             alt="Imagem do produto">
 
                         <button id="insert-in-shopping-cart" variant="outline" hlmBtn
-                            class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute bottom-2 right-2 z-50"
+                            class="bg-[color:#133c55] hover:bg-[color:#386fa4] py-2 px-3 rounded-full absolute bottom-2 right-2 z-50"
                             (click)="insertOnShoppingCart(product)">
                             <i class="ph-bold ph-shopping-cart-simple text-white"></i>
                         </button>
 
                         <button variant="outline" hlmBtn
-                            class="bg-[color:#7373ff] hover:bg-indigo-800 py-2 px-3 rounded-full absolute top-0 right-2 z-50"
+                            class="bg-[color:#133c55] hover:bg-[color:#386fa4] py-2 px-3 rounded-full absolute top-0 right-2 z-50"
                             (click)="editProduct(product.id)" *ngIf="positionId >= 2">
                             <i class="ph-fill ph-pencil-simple text-white"></i>
                         </button>

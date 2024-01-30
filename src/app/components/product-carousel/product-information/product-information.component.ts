@@ -1,5 +1,5 @@
 import { ImageService } from './../../../../services/image.service';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductModel } from 'src/models/product.model';
@@ -32,9 +32,13 @@ import { ToastService } from 'src/services/subjects/toast.service';
   templateUrl: './product-information.component.html',
   styleUrl: './product-information.component.scss',
 })
-export class ProductInformationComponent implements OnInit {
+export class ProductInformationComponent implements OnInit, AfterViewInit {
+  @ViewChild('swiperContainer') swiperContainer: ElementRef;
+
   product: ProductModel
   comments: CommentModel[] = []
+
+  widthSwiper: number
 
   constructor(
     private productService: ProductService,
@@ -48,12 +52,26 @@ export class ProductInformationComponent implements OnInit {
     private eventRealodShopingCartService: EventRealodShopingCartService,
 
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+
   ) { }
 
   ngOnInit(): void {
     this.loadQueryParamId();
     setTimeout(() => this.loadComments(), 1000)
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.widthSwiper = this.swiperContainer.nativeElement.offsetWidth;
+      if (this.widthSwiper > 400 && this.widthSwiper < 650) {
+        this.widthSwiper = this.widthSwiper / 2
+      } else if (this.widthSwiper > 650) {
+        this.widthSwiper = this.widthSwiper / 4
+      } else {
+        this.widthSwiper = this.widthSwiper / 2
+      }
+    }, 500)
   }
 
   loadQueryParamId() {

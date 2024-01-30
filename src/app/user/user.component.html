@@ -8,12 +8,12 @@
             <p *ngIf="user.id_position !== 1">
                 Cargo:
                 <span
-                    [class]="user.id_position === 2 ? 'text-green-400 font-bold ml-1' : 'text-indigo-800 font-bold ml-1'">
+                    [class]="user.id_position === 2 ? 'text-green-400 font-bold ml-1' : 'text-[color:#133c55] font-bold ml-1'">
                     {{ user.id_position === 2 ? "Vendedor" : "Adiministrador" }}
                 </span>
             </p>
         </div>
-        <div class="w-fit h-fit px-2 p-1 my-auto rounded-full bg-indigo-700">
+        <div class="w-fit h-fit px-2 p-1 my-auto rounded-full bg-[color:#133c55]">
             <i class="ph-fill ph-pencil-simple text-2xl text-white"></i>
         </div>
     </div>

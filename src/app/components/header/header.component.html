@@ -15,7 +15,7 @@
                         <p hlmCardDescription>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
                     </div>
                 </div>
-                <div class="w-8 h-8 absolute bg-[color:#7373ff] -top-2 -right-2 flex items-center justify-center rounded-full"
+                <div class="w-8 h-8 absolute bg-[color:#133c55] -top-2 -right-2 flex items-center justify-center rounded-full"
                     (click)="removeProductOfShoppingCart(i)">
                     <i class="ph-bold ph-x-circle text-xl text-center text-white"></i>
                 </div>
@@ -35,30 +35,23 @@
         </button>
     </div>
 
-    <nav class="flex justify-around items-center py-3 border-b-2 border-indigo-400">
+    <nav class="flex justify-around items-center py-3 border-b-2 border-[color:#133c55]">
         <a routerLink="/home">
             <img src="../../../assets/nx-ecommerce-logo.png" alt="Logo do projeto" class="w-28 -my-6" />
         </a>
 
-        <button hlmBtn brnSheetTrigger side="right" class="w-36 flex justify-center items-center gap-3 relative">
+        <button hlmBtn brnSheetTrigger side="right"
+            class="w-36 flex justify-center items-center gap-3 relative text-white">
             <span>Carrinho</span>
             <i class="ph-bold ph-shopping-cart-simple"></i>
-            <div class="absolute -right-1 -top-1 w-5 h-5 bg-[color:#3939E6] rounded-full text-white font-bold">
+            <div class="absolute -right-1 -top-1 w-5 h-5 bg-[color:#133c55] rounded-full text-white font-bold">
                 <p *ngIf="shoppingCart">{{ shoppingCart.products.length > 0 ? shoppingCart.products.length : 0 }}</p>
             </div>
         </button>
         <nx-ecommerce-search-bar></nx-ecommerce-search-bar>
 
-        <!--         <div class="w-2/4 h-10 border-2 border-[color:#7373ff] rounded-full flex items-center justify-end shadow-md">
-            <input type="search" id="default-search"
-                class="block w-full h-full ps-10 text-sm text-gray-900 rounded-full bg-transparent]"
-                placeholder="Procurar" (input)="onInput($event)" [(ngModel)]="searchStr">
-            <i class="ph-bold ph-magnifying-glass mr-5 text-[color:#0025cc]"></i>
-        </div> -->
-
-        <!--Adicionar tratativa para que apenas os donos de lojas possam criar produtos-->
         <a routerLink="../create-product" *ngIf="positionId >= 2">
-            <button hlmBtn class="w-fit flex justify-center items-center gap-3">
+            <button hlmBtn class="w-fit flex justify-center items-center gap-3 text-white">
                 <i class="ph-bold ph-plus-circle text-xl"></i>
                 <p>Criar produto</p>
             </button>
@@ -86,9 +79,9 @@
     </nav>
 </brn-sheet>
 
-<div class="w-full border-b-2 border-purple-300 flex justify-between items-center md:hidden">
+<div class="w-full border-b-2 border-[color:#386fa4] flex justify-between items-center md:hidden">
     <a routerLink="/home" class="text-xl font-bold"><span
-            class="text-purple-600 ml-2 mr-1 font-extrabold text-2xl">NX</span>ecommerce</a>
+            class="text-[color:#133c55] ml-2 mr-1 font-extrabold text-2xl">NX</span>ecommerce</a>
     <brn-sheet class="w-10 mr-2 my-1">
         <brn-sheet-overlay hlm />
         <div hlmSheetContent *brnSheetContent="let ctx" class="overflow-y-scroll h-screen">
@@ -105,7 +98,7 @@
 
             <nav class="flex flex-col gap-2 items-center py-3">
                 <a routerLink="../create-product" *ngIf="positionId >= 2" class="w-full">
-                    <button hlmBtn class="w-full flex justify-center items-center gap-3">
+                    <button hlmBtn class="w-full flex justify-center items-center gap-3 text-white">
                         <i class="ph-bold ph-plus-circle text-xl"></i>
                         <p>Criar produto</p>
                     </button>
@@ -113,7 +106,7 @@
 
                 <p class="w-full text-start font-bold text-lg">Meu carrinho:</p>
                 <div *ngIf="shoppingCart.products.length"
-                    class="w-full flex flex-col gap-4 my-2 overflow-y-auto p-4 border-t-2 border-indigo-400">
+                    class="w-full flex flex-col gap-4 my-2 overflow-y-auto p-4 border-t-2 border-[color:#133c55]">
                     <section hlmCard *ngFor="let product of shoppingCart.products; let i = index" class="relative">
                         <div class="bg-cover bg-center h-40"
                             [style]="'background-image: url('+ product.imagesUrl[0] +')'">
@@ -124,7 +117,7 @@
                                 <p hlmCardDescription>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
                             </div>
                         </div>
-                        <div class="w-8 h-8 absolute bg-[color:#7373ff] -top-2 -right-2 flex items-center justify-center rounded-full"
+                        <div class="w-8 h-8 absolute bg-[color:#133c55] -top-2 -right-2 flex items-center justify-center rounded-full"
                             (click)="removeProductOfShoppingCart(i)">
                             <i class="ph-bold ph-x-circle text-xl text-center text-white"></i>
                         </div>
