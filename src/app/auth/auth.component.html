@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <button hlmBtn data-testid="button-signin" type="submit"
-                        [class]="'w-64 h-10 mt-6 '+ (!signInForm.valid ? 'opacity-50' : '')"
+                        [class]="'w-64 h-10 mt-6 text-white '+ (!signInForm.valid ? 'opacity-50' : '')"
                         [disabled]="!loading && !signInForm.valid">
                         <p *ngIf="!loading">Entrar</p>
                         <div role="status" *ngIf="loading" class="flex justify-center">
