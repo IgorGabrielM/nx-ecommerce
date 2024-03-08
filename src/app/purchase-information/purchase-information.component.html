@@ -16,7 +16,7 @@
             </p>
         </div>
     </div>
-    <div class="w-full flex justify-center">
+    <div *ngIf="deletePurchase(product)" (click)="deletePurchase(product)" class="w-full flex justify-center">
         <button brnSheetClose hlm hlmBtn variant='destructive' class="w-11/12 my-2" (click)="deleteProduct()">
             <span class="mr-2">Cancelar compra</span>
             <i class="ph-bold ph-x-circle text-xl"></i>
@@ -43,7 +43,7 @@
 
     <div class="w-full">
         <div *ngIf="!isCreateComment" class="w-full flex justify-center">
-            <button hlmBtn (click)="isCreateComment = true" class="w-11/12">Escrever
+            <button hlmBtn (click)="isCreateComment = true" class="w-11/12 text-white">Escrever
                 comentário</button>
         </div>
         <div *ngIf="isCreateComment" class="flex flex-col justify-center items-center">
@@ -57,7 +57,7 @@
                     </div>
                     <span class="text-[10px] text-gray-500">Clique na estrela</span>
                 </div>
-                <button hlmBtn (click)="sendComment()">Enviar</button>
+                <button hlmBtn (click)="sendComment()" class="text-white">Enviar</button>
             </div>
         </div>
     </div>

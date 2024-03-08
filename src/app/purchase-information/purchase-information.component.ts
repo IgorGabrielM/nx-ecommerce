@@ -109,6 +109,19 @@ export class PurchaseInformationComponent {
     })
   }
 
+  deletePurchase(product): boolean {
+    if (this.purchase) {
+      const productOfPurchase = this.purchase.products.find((productForPurchase) => productForPurchase.id === product.id)
+      if (productOfPurchase.delivery_statuses.length < 4) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }
+
   getClassByRingDeliveryStatus(index: number): string {
     if (this.delivery_statuses_product && index < this.delivery_statuses_product.length) {
       return 'absolute flex items-center justify-center w-8 h-8 rounded-full -start-4 ring-4 ring-green-500 bg-green-600 text-white'
@@ -144,10 +157,10 @@ export class PurchaseInformationComponent {
   }
 
   deleteProduct() {
-    this.purchaseService.delete(this.purchase.id).then(() => {
-      this.router.navigate(['/user'])
-      this.toastService.show('Compra cancelada!');
-    })
+    /*     this.purchaseService.delete(this.purchase.id).then(() => {
+          this.router.navigate(['/user'])
+          this.toastService.show('Compra cancelada!');
+        }) */
   }
 
   selectStar(starsCount: number) {

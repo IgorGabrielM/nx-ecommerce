@@ -19,20 +19,23 @@
     </div>
     <div>
         <h2 class="text-xl font-bold mt-2">Compras</h2>
-        <div class="m-1 p-1 flex flex-wrap gap-2" *ngFor="let purchase of purchases">
-            <div *ngFor="let product of purchase.products" routerLink="../purchase-information"
-                [queryParams]="{ purchaseId: purchase.id, productId: product.id}"
-                class="w-full h-fit p-2 border rounded-lg flex items-center justify-between">
-                <img [src]="product.imagesUrl[0]" [alt]="'Imagem do produto: ' + product.name"
-                    class="w-32 h-32 object-cover">
-                <div>
-                    <h3 class="font-bold text-lg">{{ product.name }}</h3>
-                    <p>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
-                    <!--Status da entrega-->
+        <div class="flex flex-wrap justify-center">
+            <div class="w-full lg:w-80 m-1 p-1 gap-2" *ngFor="let purchase of purchases">
+                <div *ngFor="let product of purchase.products" routerLink="../purchase-information"
+                    [queryParams]="{ purchaseId: purchase.id, productId: product.id}"
+                    class="w-full  h-fit p-2 border rounded-lg flex items-center justify-between">
+                    <img [src]="product.imagesUrl[0]" [alt]="'Imagem do produto: ' + product.name"
+                        class="w-32 h-32 object-cover">
+                    <div>
+                        <h3 class="font-bold text-lg">{{ product.name }}</h3>
+                        <p>R${{ (product.price - product.discount)| number:'1.2-2' }}</p>
+                        <!--Status da entrega-->
+                    </div>
+                    <i class="ph-fill ph-caret-right"></i>
                 </div>
-                <i class="ph-fill ph-caret-right"></i>
             </div>
         </div>
+
         <div *ngIf="!purchases || !purchases.length" class="mx-3">
             <p>Você ainda não possui compras realizadas...</p>
         </div>

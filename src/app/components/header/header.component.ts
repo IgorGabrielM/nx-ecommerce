@@ -148,6 +148,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   purchaseShoppingCart() {
     this.purchaseService.create({ shopping_cart_id: Number(this.shoppingCart.id), products: this.shoppingCart.products }).then(({ data: purchase }) => {
+      console.log(purchase)
       this.shoppingCart = { ...this.shoppingCart, products: [] }
       this.shoppingCartService.update(this.shoppingCart).then(() => {
         this.router.navigate(['/purchase-details'], { queryParams: { id: purchase[0].id } })

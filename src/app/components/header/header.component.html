@@ -27,7 +27,7 @@
                 <p class="text-sm text-gray-500 line-through">R${{getTotalValueWithoutDiscount() | number:'1.2-2'}}</p>
                 <p class="text-lg text-green-700">R${{getTotalValue() | number:'1.2-2'}}</p>
             </div>
-            <button hlmBtn type="submit">Finalizar compra</button>
+            <button hlmBtn type="submit" class="text-white" (click)="purchaseShoppingCart()">Finalizar compra</button>
         </hlm-sheet-footer>
         <button brnSheetClose hlm hlmBtn variant='destructive'>
             <span class="sr-only">Close</span>
@@ -74,7 +74,7 @@
         </div>
 
         <button hlmBtn (click)="logout()" class="w-10 flex justify-center items-center gap-3">
-            <i class="ph-bold ph-sign-out"></i>
+            <i class="ph-bold ph-sign-out text-white"></i>
         </button>
     </nav>
 </brn-sheet>
