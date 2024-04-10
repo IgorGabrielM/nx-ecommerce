@@ -124,6 +124,15 @@ export class CreateProductComponent implements OnInit {
     }
   }
 
+  selectCategory(event: any) {
+    const categoryFinded = this.categories.find((category) => category.id.toString() === event.target.value.toString())
+    if (!categoryFinded) {
+      this.currentCategory = undefined;
+    } else {
+      this.currentCategory = categoryFinded;
+    }
+  }
+
   onFileChange(event: any) {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
@@ -153,12 +162,12 @@ export class CreateProductComponent implements OnInit {
 
   onSubmit() {
     if (!this.productId) {
-      this.productService.create({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id }).then(() => {
+      this.productService.create({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id, image: undefined }).then(() => {
         this.router.navigate(['/home'])
         this.toastService.show('Produto criado com sucesso!');
       })
     } else {
-      this.productService.update({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id, id: this.productId }).then(() => {
+      this.productService.update({ ...this.formData.value, images: this.fileUrl.map((file) => file.path), id_category: this.currentCategory.id, id: this.productId, image: undefined }).then(() => {
         this.router.navigate(['/home'])
         this.toastService.show('Produto editado com sucesso!');
       })
