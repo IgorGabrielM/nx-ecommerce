@@ -31,6 +31,14 @@ Bem-vindo ao projeto Nx Ecommerce! Este é um aplicativo de comércio eletrônic
     Executando Testes:
         Utilize npm run cy:run para executar os testes end-to-end com Cypress.
 
+## Imagems do projeto: 
+![Home](https://media.licdn.com/dms/image/D4D22AQEJeUAxAxhLKQ/feedshare-shrink_2048_1536/0/1712876897740?e=1715817600&v=beta&t=ZSjiLdn-fa-6s2n8G5I5MSMoEpW4yVL_eM3hTAg3kkM)
+![Carrinho](https://media.licdn.com/dms/image/D4D22AQHqgM5qBAuCnA/feedshare-shrink_800/0/1712876896049?e=1715817600&v=beta&t=izGtV2qaNifL7Op9AT25DpAVhY-PA-9uq1WxesYwvYA)
+![Página do produto](https://media.licdn.com/dms/image/D4D22AQGIJ108QNC0BA/feedshare-shrink_800/0/1712876896122?e=1715817600&v=beta&t=l_WtOrlYbcwQRyrHolGVHCyn5RmlXKZDwvjBYTjKlq4)
+![Página de perfil](https://media.licdn.com/dms/image/D4D22AQEoPmqN8y-hyA/feedshare-shrink_800/0/1712876896309?e=1715817600&v=beta&t=PV-R-51DqnLAJe_nA9a2eEMZFv0YViL9ieCvrL-wsf8)
+![Status da compa](https://media.licdn.com/dms/image/D4D22AQGTT8YdFtqymg/feedshare-shrink_2048_1536/0/1712876896361?e=1715817600&v=beta&t=q9l3j-MVsb7fwVfgIjRwuwjue4KGa0GvTGu_ztlLXrE)
+
+
 ## Contribuições:
 
 Fique à vontade para contribuir, abrir issues ou fornecer feedback. Estamos comprometidos em melhorar continuamente o Nx Ecommerce e torná-lo ainda mais robusto.
